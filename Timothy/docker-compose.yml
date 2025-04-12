@@ -12,6 +12,7 @@ services:
       - /home/timothy/docker-compose/npm/letsencrypt:/etc/letsencrypt
     restart: unless-stopped
 
+  # Prometheus
   prometheus:
     image: docker.io/prom/prometheus:latest
     container_name: prometheus
