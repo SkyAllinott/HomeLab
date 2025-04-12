@@ -1,0 +1,111 @@
+services:
+  npm:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: npm
+    ports:
+      - '80:80'
+      - '443:443'
+      - '81:81'
+    volumes:
+      - /home/timothy/docker-compose/npm/data:/data
+      - /home/timothy/docker-compose/npm/letsencrypt:/etc/letsencrypt
+    restart: unless-stopped
+
+  prometheus:
+    image: docker.io/prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    command: "--config.file=/config/prometheus.yml"
+    volumes:
+      - /etc/prometheus:/config
+      - prometheus-data:/prometheus
+    restart: unless-stopped
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:v1.9.1
+    container_name: node_exporter
+    command: "--path.rootfs=/host"
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - /:/host:ro,rslave
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - 8080:8080
+    volumes:
+      - /:/rootfs:ro
+      - /run:/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+    privileged: true
+    restart: unless-stopped
+
+  grafana:
+    image: docker.io/grafana/grafana-oss:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+
+  tautaulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Edmonton
+    volumes:
+      - /home/timothy/docker-compose/tautalli/config:/config
+    ports:
+      - 8181:8181
+    restart: unless-stopped
+
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    networks:
+      - pihole_network
+    environment:
+      - TZ=Your/Timezone
+      - WEBPASSWORD=poseidonexcel  # Replace with a secure password
+      - ServerIP=192.168.0.80
+    ports:
+      - "7080:80"  # Map external port 7080 to internal port 80 (HTTP)
+      - "7443:443" # Map external port 7443 to internal port 443 (HTTPS)
+      - "53:53"    # DNS port (still using 53 for DNS)
+      - "53:53/udp" # DNS over UDP
+    volumes:
+      - "./etc-pihole:/etc/pihole"
+      - "./etc-dnsmasq.d:/etc/dnsmasq.d"
+    restart: unless-stopped
+
+  portainer:
+    image: portainer/portainer-ce:lts
+    container_name: portainer
+    ports:
+      - "8000:8000"
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    restart: unless-stopped
+
+volumes:
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+  portainer_data:
+
+networks:
+  pihole_network:
+    driver: bridge
