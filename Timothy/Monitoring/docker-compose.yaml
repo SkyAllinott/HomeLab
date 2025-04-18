@@ -9,7 +9,7 @@ services:
       - 9090:9090
     command: "--config.file=/config/prometheus.yml"
     volumes:
-      - /etc/prometheus:/config
+      - ../../Timothy:/config
       - prometheus-data:/prometheus
     restart: unless-stopped
 

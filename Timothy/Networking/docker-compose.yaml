@@ -20,7 +20,7 @@ services:
       - pihole_network
     environment:
       - TZ=Your/Timezone
-      - WEBPASSWORD=poseidonexcel  # Replace with a secure password
+      - WEBPASSWORD=${PIHOLE_PASSWORD}  # Replace with a secure password
       - ServerIP=192.168.0.80
     ports:
       - "7080:80"  # Map external port 7080 to internal port 80 (HTTP)
