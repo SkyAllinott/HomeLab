@@ -23,3 +23,11 @@ scrape_configs:
  - job_name: 'cadvisor_winston'
    static_configs:
      - targets: ['192.168.0.92:8080']
+
+ - job_name: 'uptime'
+   scheme: http
+   static_configs:
+     - targets: ['uptime.winston-server.com']
+   basic_auth:
+     username: Sky
+     password: Poseidonexcel12!
