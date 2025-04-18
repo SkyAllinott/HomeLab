@@ -33,7 +33,7 @@ services:
       - TZ=America/Edmonton
       - TRANSMISSION_WEB_HOME= #optional
       - USER=sky
-      - PASS=transmission
+      - PASS=${TRANSMISSION_PASSWORD}
       - WHITELIST= #optional
       - PEERPORT= #optional
       - HOST_WHITELIST= #optional
