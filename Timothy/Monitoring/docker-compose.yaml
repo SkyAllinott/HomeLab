@@ -71,6 +71,16 @@ services:
       - portainer_data:/data
     restart: unless-stopped
 
+  uptime-kuma:
+    container_name: uptime_kuma
+    image: louislam/uptime-kuma:1
+    volumes:
+      - ./data:/app/data
+    ports:
+      # <Host Port>:<Container Port>
+      - 3001:3001
+    restart: unless-stopped
+
 volumes:
   prometheus-data:
     driver: local
