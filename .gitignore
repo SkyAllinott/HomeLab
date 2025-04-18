@@ -1,0 +1,11 @@
+# Ignore everything by default
+*
+
+# Don't ignore directories
+!*/
+
+# Don't ignore config files
+!*.yaml
+!*.yml
+!.gitattributes
+!.gitignore
