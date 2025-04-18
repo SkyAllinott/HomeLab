@@ -1,0 +1,5 @@
+version: "3.9"
+
+include:
+  - ./Networking/docker-compose.yaml
+  - ./Monitoring/docker-compose.yaml

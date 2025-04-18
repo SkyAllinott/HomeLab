@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  npm:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: npm
+    ports:
+      - '80:80'
+      - '443:443'
+      - '81:81'
+    volumes:
+      - /home/timothy/docker-compose/npm/data:/data
+      - /home/timothy/docker-compose/npm/letsencrypt:/etc/letsencrypt
+    restart: unless-stopped
+
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    networks:
+      - pihole_network
+    environment:
+      - TZ=Your/Timezone
+      - WEBPASSWORD=poseidonexcel  # Replace with a secure password
+      - ServerIP=192.168.0.80
+    ports:
+      - "7080:80"  # Map external port 7080 to internal port 80 (HTTP)
+      - "7443:443" # Map external port 7443 to internal port 443 (HTTPS)
+      - "53:53"    # DNS port (still using 53 for DNS)
+      - "53:53/udp" # DNS over UDP
+    volumes:
+      - "../../../docker-compose/etc-pihole:/etc/pihole"
+      - "../../../docker-compose/etc-dnsmasq.d:/etc/dnsmasq.d"
+    restart: unless-stopped
+
+
+networks:
+  pihole_network:
+    driver: bridge
