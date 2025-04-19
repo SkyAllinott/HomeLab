@@ -81,6 +81,15 @@ services:
       - 3001:3001
     restart: unless-stopped
 
+  glance:
+    container_name: glance
+    image: glanceapp/glance
+    volumes:
+      - ./config:/app/config
+    ports:
+      - 8081:8080
+    restart: unless-stopped
+
 volumes:
   prometheus-data:
     driver: local
