@@ -10,3 +10,4 @@
 !.gitattributes
 !.gitignore
 !Dockerfile
+!*.py
