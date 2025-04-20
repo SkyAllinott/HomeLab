@@ -1,0 +1,20 @@
+- type: custom-api
+  title: Constructors Standings
+  cache: 1d
+  url: http://192.168.0.80:6344/constructors_championship
+  template: |
+    <ul class="list collapsible-container" data-collapse-after="5">
+      {{ range $i, $v := .JSON.Array "constructors" }}
+      <li class="flex items-center {{ if eq $i 0 }}color-primary{{ else if eq $i 1 }}color-highlight{{ end }}">
+        <span class="grow min-width-0">
+          {{ .String "position" }}. {{ .String "team" }}<span style="margin-left: 2px;">
+            <img src="https://flagcdn.com/w20/{{ .String "flag" }}.png"
+                 alt=""
+                 style="width: 20px; height: 14px; object-fit: cover; vertical-align: middle"
+                 class="inline-block rounded-sm" />
+          </span>
+        </span>
+        <span class="shrink-0 text-right">{{ .String "points" }}</span>
+      </li>
+      {{ end }}
+    </ul>

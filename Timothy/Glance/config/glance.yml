@@ -1,51 +1,22 @@
 pages:
   - name: Home
-    # Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
-    # hide-desktop-navigation: true
+    width: wide
     columns:
       - size: small
         widgets:
-          - type: clock
-            hour-format: 12h
-            timezones:
-              - timezone: Europe/London
-                label: England
-              - timezone: Europe/Stockholm
-                label: Sweden
-              - timezone: US/Central
-                label: Dallas
+          !include: ./f1_extensions/f1_next_race.yml
 
-          - type: custom-api
-            title: Constructors Standings
-            cache: 1d
-            url: https://f1api.dev/api/current/constructors-championship
-            template: |
-              <ul class="list collapsible-container" data-collapse-after="5">
-                {{ range $i, $v := .JSON.Array "constructors_championship" }}
-                <li class="flex items-center {{ if eq $i 0 }}color-primary{{ else if eq $i 1 }}color-highlight{{ end }}">
-                  <span class="grow min-width-0">{{ .String "position" }}. {{ .String "team.teamName" }}</span>
-                  <span class="shrink-0 text-right">{{ .String "points" }}</span>
-                </li>
-                {{ end }}
-              </ul>
+          !include: ./f1_extensions/f1_constructors_championship.yml
+
+          !include: ./f1_extensions/f1_drivers_championship.yml
 
           - type: group
             widgets:
               - type: reddit
+                cache: 30m
                 subreddit: formula1
                 style: vertical-cards
                 limit: 3
-
-          - type: twitch-channels
-            collapse-after: 3
-            channels:
-              - Northernlion
-              - shxtou
-              - sleepy
-              - birlap
-              - Squeex
-              - p4perback
-              - WhatAboutAndy
 
       - size: full
         widgets:
@@ -60,25 +31,21 @@ pages:
                   - title: Github
                     url: https://github.com/
                   - title: Amazon
-                    url: https://www.amazon.com/
-                  - title: Github
-                    url: https://github.com/
+                    url: https://www.amazon.ca/
+                  - title: Movie Rankings
+                    url: https://docs.google.com/spreadsheets/d/1d-YPy20QbiuzhKRq7IFGd5rfE0Iq9imoFgyNbzKo1uc/edit?usp=sharing
               - title: Entertainment
                 links:
+                  - title: Plex
+                    url: https://app.plex.tv/desktop/#!/
                   - title: YouTube
                     url: https://www.youtube.com/
-                  - title: Prime Video
-                    url: https://www.primevideo.com/
-                  - title: Disney+
-                    url: https://www.disneyplus.com/
               - title: Social
                 links:
                   - title: Reddit
-                    url: https://www.reddit.com/
+                    url: https://old.reddit.com/
                   - title: Twitter
-                    url: https://twitter.com/
-                  - title: Instagram
-                    url: https://www.instagram.com/
+                    url: https://x.com/home
 
           - type: custom-api
             title: Uptime Kuma
@@ -133,6 +100,7 @@ pages:
               {{ end }}
 
           - type: videos
+            cache: 1h
             style: grid-cards
             collapse-after-rows: 1
             channels:
@@ -144,20 +112,34 @@ pages:
           - type: group
             widgets:
               - type: reddit
+                cache: 30m
                 subreddit: edmonton
                 show-thumbnails: true
               - type: reddit
+                cache: 30m
                 subreddit: alberta
                 show-thumbnails: true
               - type: reddit
+                cache: 30m
                 subreddit: homelab
                 show-thumbnails: true
               - type: reddit
+                cache: 30m
                 subreddit: movies
                 show-thumbnails: true
 
       - size: small
         widgets:
+          - type: clock
+            hour-format: 12h
+            timezones:
+             - timezone: Europe/London
+               label: England
+             - timezone: Europe/Stockholm
+               label: Sweden
+             - timezone: US/Central
+               label: Dallas
+
           - type: weather
             location: Edmonton, Canada
             units: metric # alternatively "imperial"
@@ -166,6 +148,7 @@ pages:
             # hide-location: true
 
           - type: markets
+            cache: 5m
             markets:
               - symbol: VEQT.TO
                 name: Vanguard Total World Equity
@@ -173,27 +156,24 @@ pages:
                 name: Vanguard S&P 500
               - symbol: TEC.TO
                 name: TD Technology ETF
-              - symbol: EQB.TO
-                name: Equitable Bank
-              - symbol: IFC.TO
-                name: Intact Financial
-              - symbol: DOL.TO
-                name: Dollarama
 
-          - type: releases
-            cache: 1d
-            # Without authentication the Github API allows for up to 60 requests per hour. You can create a
-            # read-only token from your Github account settings and use it here to increase the limit.
-            # token: ...
-            repositories:
-              - glanceapp/glance
-              - go-gitea/gitea
-              - immich-app/immich
-              - syncthing/syncthing
+          - type: twitch-channels
+            cache: 15m
+            collapse-after: 3
+            channels:
+              - Northernlion
+              - shxtou
+              - sleepy
+              - birlap
+              - Squeex
+              - p4perback
+              - WhatAboutAndy
+
 
 
 # To be added
   - name: Markets
+    width: wide
     columns:
       - size: small
         widgets:
@@ -206,12 +186,28 @@ pages:
 
 # To be added
   - name: Server
+    width: wide
     columns:
       - size: small
         widgets:
+          - type: bookmarks
+            groups:
+              - title: Services
+                links:
+                  - title: Sonarr
+                    url: http://sonarr.winston-server.com
+                  - title: Radarr
+                    url: http://radarr.winston-server.com
+                  - title: Pihole
+                    url: http://pihole.winston-server.com/admin
 
       - size: full
         widgets:
 
       - size: small
         widgets:
+         - type: releases
+           repositories:
+            - linuxserver/docker-plex
+            - glanceapp/glance
+            - pi-hole/pi-hole

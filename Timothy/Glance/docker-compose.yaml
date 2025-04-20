@@ -6,6 +6,24 @@ services:
     image: glanceapp/glance
     volumes:
       - /home/timothy/HomeLab/Timothy/Glance/config:/app/config
+      - /home/timothy/HomeLab/Timothy/Glance/config/f1_extensions:/app/f1_extensions
     ports:
       - 8081:8080
+    depends_on:
+      - f1_latest
+      - f1_constructors
     restart: unless-stopped
+
+  f1_latest:
+    container_name: f1_latest
+    build:
+      context: /home/timothy/HomeLab/Timothy/Glance/config/f1_extensions/f1_api_wrappers/latest_race
+    ports:
+      - 4463:4463
+
+  f1_constructors:
+    container_name: f1_constructors
+    build:
+      context: /home/timothy/HomeLab/Timothy/Glance/config/f1_extensions/f1_api_wrappers/constructors
+    ports:
+      - 6344:6344

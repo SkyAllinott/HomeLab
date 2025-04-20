@@ -9,3 +9,4 @@
 !*.yml
 !.gitattributes
 !.gitignore
+!Dockerfile

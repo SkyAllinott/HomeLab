@@ -1,0 +1,29 @@
+- type: custom-api
+  title: Drivers Standings
+  cache: 1d
+  url: https://f1api.dev/api/current/drivers-championship
+  template: |
+    <ul class="list collapsible-container" data-collapse-after="3">
+      {{ range $i, $v := .JSON.Array "drivers_championship" }}
+      <li class="flex items-center {{ if eq $i 0 }}color-primary{{ else if eq $i 1 }}color-highlight{{ end }}">
+        <div class="grow min-width-0">
+          <span>{{ .String "position" }}. {{ .String "driver.surname" }}</span>
+          {{ $id := .String "team.teamId" }}
+            <span class="size-h6">
+              ( {{- if eq $id "red_bull" -}}Red Bull
+              {{- else if eq $id "aston_martin" -}}Aston Martin
+              {{- else if eq $id "mercedes" -}}Mercedes
+              {{- else if eq $id "ferrari" -}}Ferrari
+              {{- else if eq $id "mclaren" -}}McLaren
+              {{- else if eq $id "williams" -}}Williams
+              {{- else if eq $id "alpine" -}}Alpine
+              {{- else if eq $id "haas" -}}Haas
+              {{- else if eq $id "rb" -}}RB
+              {{- else if eq $id "sauber" -}}Sauber
+              {{- else -}}{{ $id }}{{- end -}})
+            </span>
+        </div>
+        <span class="shrink-0 text-right">{{ .String "points" }}</span>
+      </li>
+      {{ end }}
+    </ul>

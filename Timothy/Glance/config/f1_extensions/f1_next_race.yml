@@ -1,0 +1,42 @@
+- type: custom-api
+  title: Next Race
+  cache: 2h
+  url: http://f1_latest:4463/f1/last
+  template: |
+    <div class="flex flex-column gap-10">
+      {{ $session := index (.JSON.Array "race") 0 }}
+      <p class="size-h5">
+        {{ .JSON.String "season" }}, Round {{ .JSON.String "round" }}
+      </p>
+
+      <div class="margin-block-4">
+        <p class="color-highlight">{{ $session.String "raceName" }}</p>
+        <p class="color-primary">
+          <span>
+            Race
+          </span>
+          {{ $datetime := $session.String "schedule.race.datetime_rfc3339" }}
+          <span
+            class="color-highlight"
+            title="{{ $session.String "schedule.race.date" }}"
+            {{ parseRelativeTime "rfc3339" $datetime }}
+          ></span>
+        </p>
+        <p class="size-h5">
+          {{ $session.String "schedule.race.date" }} @  {{ $session.String "schedule.race.time" }}MT
+        </p>
+        <br>
+        <p class = "color-highlight">
+          Circuit Details
+        </p>
+        <p class="size-h6">
+          Name: {{ $session.String "circuit.circuitName" }}
+        </p>
+        <p class="size-h6">
+          Lap Record: {{ $session.String "circuit.lapRecord" }}, {{ $session.String "circuit.fastestLapDriverName" }} ({{ $session.String "circuit.fastestLapYear"}})
+        </p>
+        <p class="size-h6">
+          Length: {{ $session.String "laps" }} laps @ {{ $session.String "circuit.circuitLengthKm" }} KMs
+        </p>
+      </div>
+    </div>
