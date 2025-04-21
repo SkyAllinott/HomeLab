@@ -1,6 +1,6 @@
 - type: custom-api
   title: Constructors Standings
-  cache: 1d
+  cache: 12h
   url: http://192.168.0.80:6344/constructors_championship
   template: |
     <ul class="list collapsible-container" data-collapse-after="5">

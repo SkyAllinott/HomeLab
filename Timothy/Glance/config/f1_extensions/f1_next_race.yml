@@ -1,6 +1,6 @@
 - type: custom-api
   title: Next Race
-  cache: 2h
+  cache: 1h
   url: http://f1_latest:4463/f1/last
   template: |
     <div class="flex flex-column gap-10">

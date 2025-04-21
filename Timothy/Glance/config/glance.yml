@@ -47,57 +47,57 @@ pages:
                   - title: Twitter
                     url: https://x.com/home
 
-#          - type: custom-api
-#            title: Uptime Kuma
-#            url: http://uptime.winston-server.com/api/status-page/services
-#            subrequests:
-#              heartbeats:
-#                url: http://uptime.winston-server.com/api/status-page/heartbeat/services
-#            cache: 10m
-#            template: |
-#              {{ $hb := .Subrequest "heartbeats" }}
-#
-#              {{ if not (.JSON.Exists "publicGroupList") }}
-#              <p class="color-negative">Error reading response</p>
-#              {{ else if eq (len (.JSON.Array "publicGroupList")) 0 }}
-#              <p>No monitors found</p>
-#              {{ else }}
-#
-#              <ul class="dynamic-columns list-gap-8">
-#                {{ range .JSON.Array "publicGroupList" }}
-#                {{ range .Array "monitorList" }}
-#                {{ $id := .String "id" }}
-#                {{ $hbArray := $hb.JSON.Array (print "heartbeatList." $id) }}
-#                {{ $latest := index $hbArray (toInt (sub ((len $hbArray) | toFloat) 1)) }}
-#                <div class="flex items-center gap-12">
-#                  <a class="size-title-dynamic color-highlight text-truncate block grow" href="http://uptime.winston-server.com/dashboard/{{ $id }}"
-#                    target="_blank" rel="noreferrer">
-#                    {{ .String "name" }} </a>
-#                  {{ if eq ($latest.Int "status") 1 }}
-#                  <div>{{ $latest.Int "ping" }}ms</div>
-#                  <div class="monitor-site-status-icon-compact" title="OK">
-#                    <svg fill="var(--color-positive)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-#                      <path fill-rule="evenodd"
-#                        d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"
-#                        clip-rule="evenodd"></path>
-#                    </svg>
-#                  </div>
-#                  {{ else }}
-#                  <div><span class="color-negative">DOWN</span></div>
-#                  <div class="monitor-site-status-icon-compact" title="{{ if $latest.Exists " msg" }}{{ $latest.String "msg" }}{{ else
-#                    }}Error{{ end }}">
-#                    <svg fill="var(--color-negative)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-#                      <path fill-rule="evenodd"
-#                        d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495ZM10 5a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 5Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
-#                        clip-rule="evenodd"></path>
-#                    </svg>
-#                  </div>
-#                  {{ end }}
-#                </div>
-#                {{ end }}
-#                {{ end }}
-#              </ul>
-#              {{ end }}
+          - type: custom-api
+            title: Uptime Kuma
+            url: http://uptime.winston-server.com/api/status-page/services
+            subrequests:
+              heartbeats:
+                url: http://uptime.winston-server.com/api/status-page/heartbeat/services
+            cache: 10m
+            template: |
+              {{ $hb := .Subrequest "heartbeats" }}
+
+              {{ if not (.JSON.Exists "publicGroupList") }}
+              <p class="color-negative">Error reading response</p>
+              {{ else if eq (len (.JSON.Array "publicGroupList")) 0 }}
+              <p>No monitors found</p>
+              {{ else }}
+
+              <ul class="dynamic-columns list-gap-8">
+                {{ range .JSON.Array "publicGroupList" }}
+                {{ range .Array "monitorList" }}
+                {{ $id := .String "id" }}
+                {{ $hbArray := $hb.JSON.Array (print "heartbeatList." $id) }}
+                {{ $latest := index $hbArray (toInt (sub ((len $hbArray) | toFloat) 1)) }}
+                <div class="flex items-center gap-12">
+                  <a class="size-title-dynamic color-highlight text-truncate block grow" href="http://uptime.winston-server.com/dashboard/{{ $id }}"
+                    target="_blank" rel="noreferrer">
+                    {{ .String "name" }} </a>
+                  {{ if eq ($latest.Int "status") 1 }}
+                  <div>{{ $latest.Int "ping" }}ms</div>
+                  <div class="monitor-site-status-icon-compact" title="OK">
+                    <svg fill="var(--color-positive)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"
+                        clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  {{ else }}
+                  <div><span class="color-negative">DOWN</span></div>
+                  <div class="monitor-site-status-icon-compact" title="{{ if $latest.Exists " msg" }}{{ $latest.String "msg" }}{{ else
+                    }}Error{{ end }}">
+                    <svg fill="var(--color-negative)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd"
+                        d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495ZM10 5a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 5Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+                        clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  {{ end }}
+                </div>
+                {{ end }}
+                {{ end }}
+              </ul>
+              {{ end }}
 
           - type: videos
             cache: 1h
@@ -155,7 +155,7 @@ pages:
 
 
           - type: markets
-            cache: 15m
+            cache: 5m
             markets:
               - symbol: VEQT.TO
                 name: Vanguard Total World Equity
@@ -166,7 +166,7 @@ pages:
 
 
           - type: twitch-channels
-            cache: 15m
+            cache: 5m
             collapse-after: 3
             channels:
               - Northernlion

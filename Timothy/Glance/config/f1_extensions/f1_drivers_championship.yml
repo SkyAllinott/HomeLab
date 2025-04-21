@@ -1,6 +1,6 @@
 - type: custom-api
   title: Drivers Standings
-  cache: 1d
+  cache: 12h
   url: https://f1api.dev/api/current/drivers-championship
   template: |
     <ul class="list collapsible-container" data-collapse-after="3">
