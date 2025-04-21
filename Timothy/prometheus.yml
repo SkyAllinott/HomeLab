@@ -30,5 +30,5 @@ scrape_configs:
    static_configs:
      - targets: ['192.168.0.80:3001']
    basic_auth:
-     username: ${UPTIME_USER}
-     password: ${UPTIME_PASSWORD}
+     username: Sky
+     password: UptimeKuma12!
