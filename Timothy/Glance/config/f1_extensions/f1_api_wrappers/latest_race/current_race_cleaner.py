@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.inmemory import InMemoryBackend
-from fastapi_cache.coder import JsonCoder
 import httpx
 from datetime import datetime, timedelta
 import pytz
@@ -11,9 +10,8 @@ app = FastAPI()
 MT = pytz.timezone("America/Edmonton")
 UTC = pytz.utc
 
-@app.on_event("startup")
-
 # Initialize memory caching
+@app.on_event("startup")
 async def startup():
     FastAPICache.init(InMemoryBackend())
 
@@ -28,26 +26,12 @@ def convert_to_mt(date_str, time_str):
 async def get_last_race():
     cache_key = "f1:last_race"
     cache = FastAPICache.get_backend()
-    coder = JsonCoder()
 
-    # See if cache exists
+    # Try cache
     cached = await cache.get(cache_key)
-
     if cached:
-        # Extract race time from cache
-        try:
-            race_schedule = cached["race"][0]["schedule"]
-            race_date = race_schedule["race"]["date"]
-            race_time = race_schedule["race"]["time"]
-            race_dt = convert_to_mt(race_date, race_time)
+        return cached
 
-            now = datetime.now(MT)
-            if now < race_dt + timedelta(hours=4):  # idk when API refreshes, 4 hours after?
-                return cached
-        except Exception as e:
-            print(f"Cache check error, refetching: {e}")
-
-    # If cache needs to update:
     async with httpx.AsyncClient() as client:
         r = await client.get("https://f1api.dev/api/current/next")
         data = r.json()
@@ -89,7 +73,20 @@ async def get_last_race():
         else:
             race["totalDistanceKm"] = None
 
-    # Cache the result
-    # Refresh every 7 days in case something breaks cause it probably will
-    await cache.set(cache_key, data, expire=604800)
+    # Calculate when cache should disappear
+    try:
+        first_race = data.get("race", [])[0]
+        schedule = first_race.get("schedule", {})
+        race_dt_str = schedule.get("race", {}).get("datetime_rfc3339")
+        if race_dt_str:
+            race_dt = datetime.fromisoformat(race_dt_str)
+            race_dt = race_dt.astimezone(MT)
+            expire = int((race_dt + timedelta(hours=4) - datetime.now(MT)).total_seconds())
+        else:
+            expire = 3600  # fallback to 1 hour if can't fetch race date for any reason
+    except Exception as e:
+        print("Failed to determine cache expiry:", e)
+        expire = 3600
+
+    await cache.set(cache_key, data, expire=expire)
     return data
