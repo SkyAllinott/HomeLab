@@ -4,6 +4,6 @@ WORKDIR /app
 
 COPY ./current_race_cleaner.py /app/main.py
 
-RUN pip install fastapi uvicorn requests pytz
+RUN pip install fastapi uvicorn httpx pytz fastapi-cache2
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "4463"]
