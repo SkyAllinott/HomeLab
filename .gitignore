@@ -11,3 +11,4 @@
 !.gitignore
 !Dockerfile
 !*.py
+!*.txt

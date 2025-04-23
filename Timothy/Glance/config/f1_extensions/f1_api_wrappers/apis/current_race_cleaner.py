@@ -1,17 +1,17 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.inmemory import InMemoryBackend
 import httpx
 from datetime import datetime, timedelta
 import pytz
 
-app = FastAPI()
+router = APIRouter()
 
 MT = pytz.timezone("America/Edmonton")
 UTC = pytz.utc
 
 # Initialize memory caching
-@app.on_event("startup")
+@router.on_event("startup")
 async def startup():
     FastAPICache.init(InMemoryBackend())
 
@@ -22,7 +22,7 @@ def convert_to_mt(date_str, time_str):
     dt_utc = UTC.localize(dt_utc)
     return dt_utc.astimezone(MT)
 
-@app.get("/f1/last")
+@router.get("/", summary="Fetch next race")
 async def get_last_race():
     cache_key = "f1:last_race"
     cache = FastAPICache.get_backend()

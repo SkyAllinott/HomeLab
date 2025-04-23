@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.inmemory import InMemoryBackend
 import pycountry
@@ -6,15 +6,16 @@ import httpx
 from datetime import datetime, timedelta
 import pytz
 
-app = FastAPI()
+router = APIRouter()
 
 MT = pytz.timezone("America/Edmonton")
 
 # Initialize caching
-@app.on_event("startup")
+@router.on_event("startup")
 async def startup():
     FastAPICache.init(InMemoryBackend())
 
+# The API uses some weird country names that don't match standard
 def country_to_code(country_name: str) -> str:
     replacements = {
         "Great Britain": "GB",
@@ -30,7 +31,7 @@ async def get_next_race_end():
     async with httpx.AsyncClient() as client:
         try:
 	   # Use f1_latest API to fetch race time for smart caching
-            r = await client.get("http://192.168.0.80:4463/f1/last")
+            r = await client.get("http://192.168.0.80:4463/f1/next_race/")
             data = r.json()
             race = data.get("race", [])[0]
             schedule = race.get("schedule", {})
@@ -45,7 +46,7 @@ async def get_next_race_end():
             print("Error fetching race time:", e)
     return None
 
-@app.get("/constructors_championship")
+@router.get("/", summary="Fetch current constructors championship")
 async def get_constructors_championship():
     cache = FastAPICache.get_backend()
     cache_key = "constructors_championship"

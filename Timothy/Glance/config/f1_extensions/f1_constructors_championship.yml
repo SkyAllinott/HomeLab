@@ -1,7 +1,7 @@
 - type: custom-api
   title: Constructors Standings
   cache: 1h
-  url: http://192.168.0.80:6344/constructors_championship
+  url: http://192.168.0.80:4463/f1/constructors_standings/
   template: |
     <ul class="list collapsible-container" data-collapse-after="5">
       {{ range $i, $v := .JSON.Array "constructors" }}

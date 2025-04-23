@@ -1,7 +1,7 @@
 - type: custom-api
   title: Next Race
   cache: 1h
-  url: http://f1_latest:4463/f1/last
+  url: http://192.168.0.80:4463/f1/next_race/
   template: |
     <div class="flex flex-column gap-10">
       {{ $session := index (.JSON.Array "race") 0 }}
@@ -25,8 +25,16 @@
         <p class="size-h5">
           {{ $session.String "schedule.race.date" }} @  {{ $session.String "schedule.race.time" }}MT
         </p>
-        <br>
-        <p class = "color-highlight">
+
+        <div style="margin-block: 1rem;">
+          <img
+            src="http://192.168.0.80:4463/f1/next_map/"
+            alt="Track Map"
+            style="max-width: 100%; height: auto; border-radius: 8px;"
+          />
+        </div>
+
+        <p class="color-highlight">
           Circuit Details
         </p>
         <p class="size-h6">
