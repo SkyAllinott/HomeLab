@@ -65,7 +65,7 @@ async def get_last_race():
 
         fastest_lap_time = circuit.get("lapRecord")
         if fastest_lap_time:
-            circuit["lapRecord"] = fastest_lap_time.replace(":", ".", 1)
+            circuit["lapRecord"] = ".".join(fastest_lap_time.rsplit(":", 1))
 
         laps = race.get("laps")
         if laps and circuit.get("circuitLengthKm") is not None:
@@ -83,10 +83,10 @@ async def get_last_race():
             race_dt = race_dt.astimezone(MT)
             expire = int((race_dt + timedelta(hours=4) - datetime.now(MT)).total_seconds())
         else:
-            expire = 3600  # fallback to 1 hour if can't fetch race date for any reason
+            expire = 60 * 5  # fallback to 1 hour if can't fetch race date for any reason
     except Exception as e:
         print("Failed to determine cache expiry:", e)
-        expire = 3600
+        expire = 60 * 60
 
     await cache.set(cache_key, data, expire=expire)
     return data

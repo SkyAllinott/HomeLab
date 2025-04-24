@@ -10,7 +10,10 @@ def generate_track_map_svg(year: int, gp: str, session_type: str = "Q") -> str:
 
     # Load data from f1 API
     session = fastf1.get_session(year, gp, session_type)
-    session.load()
+
+    # I hate this API, please let me load just one drivers telemetry not everything...
+    # SO SO SO SO SO SLOW
+    session.load(weather=False, messages=False, telemetry=True)
     lap = session.laps.pick_fastest()
     telemetry = lap.get_telemetry().dropna(subset=["X", "Y"])
 

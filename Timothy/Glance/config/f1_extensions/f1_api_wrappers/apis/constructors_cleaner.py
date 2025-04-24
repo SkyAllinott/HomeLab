@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 import pytz
 
 router = APIRouter()
+LAST_RACE_API_URL = "http://192.168.0.80:4463/f1/next_race/"
 
 MT = pytz.timezone("America/Edmonton")
 
@@ -31,7 +32,7 @@ async def get_next_race_end():
     async with httpx.AsyncClient() as client:
         try:
 	   # Use f1_latest API to fetch race time for smart caching
-            r = await client.get("http://192.168.0.80:4463/f1/next_race/")
+            r = await client.get(LAST_RACE_API_URL)
             data = r.json()
             race = data.get("race", [])[0]
             schedule = race.get("schedule", {})
@@ -65,10 +66,15 @@ async def get_constructors_championship():
     constructors = data.get("constructors_championship", [])
     results = []
     for entry in constructors:
+
+        # Clean up team names and get rid of standard boilerplate slop
         team = entry.get("team", {})
+        team_name = team.get("teamName")
+        for word in ['Formula 1', 'F1', 'Racing', 'Team']:
+            team_name = team_name.replace(word, "").strip()
         country = team.get("country", "")
         results.append({
-            "team": team.get("teamName"),
+            "team": team_name,
             "position": entry.get("position"),
             "points": entry.get("points"),
             "wins": entry.get("wins") or 0,
@@ -81,7 +87,9 @@ async def get_constructors_championship():
 
     # Cache until race ends or 1 hour (in case f1/last is down or something
     race_end = await get_next_race_end()
-    expire = int((race_end - datetime.now(MT)).total_seconds()) if race_end else 3600
+    if race_end:
+        expire = int((race_end - datetime.now(MT)).total_seconds()) 
+    else: 3600
 
     await cache.set(cache_key, response_data, expire=expire)
     return response_data
