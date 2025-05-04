@@ -9,12 +9,15 @@ services:
           cpus: '3'
           memory: 6gb
     container_name: plex
+    runtime: nvidia
     network_mode: host
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=America/Edmonton
       - VERSION=docker
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
       - PLEX_CLAIM= #optional
     volumes:
       - /home/sky/docker-compose/plex/library:/config
