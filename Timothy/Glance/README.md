@@ -10,5 +10,9 @@ python scripts to run the FastAPI.
 
 My custom API uses smart caching to only fetch new data 4 hours after the race ends on Sundays to minimize latency issues with Glance. 
 
+### Organization
+All the information is contained in the Glance/config/f1_extensions diretory. It contains the 3 custom yaml files that glance uses (utilizes GO HTML). 
+The further subdirecotyr f1_api_wrappers contains all the docker and python files to run the API.
+
 ## Set up
 I don't think anything special is required to run this set up, just be careful of references to host names and other things.
