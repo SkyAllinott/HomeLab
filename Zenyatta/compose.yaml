@@ -1,1 +1,4 @@
-# In progress
+version: "3.9"
+
+include:
+  - ./Monitoring/docker-compose.yaml
