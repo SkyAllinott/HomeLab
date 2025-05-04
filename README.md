@@ -29,6 +29,8 @@ For more specific information, each section will have its own README.
 I use docker compose for everything. I organize my services for each server into stacks. For instance, Winston has a media stack that contains plex, sonarr, radarr, etc. 
 This keeps the compose files from getting too unruly.
 
+The general structure for each server is they have a parent compose file, called compose.yaml, in their respective directory. That compose file will only utilize dockers 'include' command, to stitch together all of that servers stacks. IE, Winston's compose.yaml will include the media and monitoring stacks. The actual services are written in the child compose files, within the respective stacks directory.
+
 ## Naming Conventions
 I use overwatch character names where I'm able to name all devices. Each character is representative of the hardware. IE, my access point is named Echo, my router is named Lucio (shooting out waves), etc. 
 
