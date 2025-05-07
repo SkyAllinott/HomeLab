@@ -153,6 +153,7 @@ pages:
             # Optionally hide the location from being displayed in the widget
             # hide-location: true
 
+          !include: ./ghostfolio/ghostfolio.yml
 
           - type: markets
             cache: 5m
@@ -163,7 +164,6 @@ pages:
                 name: Vanguard S&P 500
               - symbol: TEC.TO
                 name: TD Technology ETF
-
 
           - type: twitch-channels
             cache: 5m
@@ -219,3 +219,4 @@ pages:
             - linuxserver/docker-plex
             - glanceapp/glance
             - pi-hole/pi-hole
+
