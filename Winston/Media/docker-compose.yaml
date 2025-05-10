@@ -23,8 +23,10 @@ services:
       - /home/sky/docker-compose/plex/library:/config
       - /mnt/a/plex/tv_shows:/tv
       - /mnt/b/plex/tv_shows:/tv2
+      - /mnt/c/plex/tv_shows:/tv3
       - /mnt/a/plex/movies:/movies
       - /mnt/b/plex/movies:/movies2
+      - /mnt/c/plex/movies:/movies3
     restart: unless-stopped
 
   transmission:
@@ -77,6 +79,7 @@ services:
       - /home/sky/docker-compose/sonarr/config:/config
       - /mnt/a/plex/tv_shows:/tv
       - /mnt/b/plex/tv_shows:/tv2
+      - /mnt/c/plex/tv_shows:/tv3
       - /mnt/a/transmission/downloads:/downloads
     ports:
       - 8989:8989
@@ -93,6 +96,7 @@ services:
       - /home/sky/docker-compose/radarr/config:/config
       - /mnt/a/plex/movies:/movies
       - /mnt/b/plex/movies:/movies2
+      - /mnt/c/plex/movies:/movies3
       - /mnt/a/transmission/downloads:/downloads
     ports:
       - 7878:7878
@@ -109,8 +113,10 @@ services:
       - /home/sky/docker-compose/bazarr/config:/config
       - /mnt/a/plex/tv_shows:/tv
       - /mnt/b/plex/tv_shows:/tv2
+      - /mnt/c/plex/tv_shows:/tv3
       - /mnt/a/plex/movies:/movies
       - /mnt/b/plex/movies:/movies2
+      - /mnt/c/plex/movies:/movies3
     ports:
       - 6767:6767
     restart: unless-stopped
