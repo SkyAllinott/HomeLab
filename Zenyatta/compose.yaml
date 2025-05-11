@@ -3,3 +3,4 @@ version: "3.9"
 include:
   - ./Monitoring/docker-compose.yaml
   - ./Ghostfolio/docker-compose.yaml
+  - ./HomeAssistant/docker-compose.yaml
