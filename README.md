@@ -17,6 +17,7 @@ Below are the specs for each along with my personal PC Dva (which is only *techn
 | OS | Debian 12 | Raspbian 12 | Debian 13 (Testing, stable) | Windows 11 |
 | Desktop Environment | Gnome | None | None | Windows 11 |
 | CPU | i5-7600k | ARM Cortex A-76 | i5-7500T | i7-8700k |
+| RAM | 32GB DDR4 3200MHz | 4GB SDRAM | 16GB SODIMM 2133MHz | 32GB DDR4 3200Mhz |
 | GPU | GTX 1080 | None | None | GTX 3080 |
 | Storage | 1TB M.2, 12TB HDD (NAS) | 32GB SD Card | 256GB M.2 | 500GB M.2, 500GB SSD, 2TB HDD |
 | Primary Purpose | Plex/media server | Pihole/networking/monitoring | Home assistant | Gaming, day to day use |
