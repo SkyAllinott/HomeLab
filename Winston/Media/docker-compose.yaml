@@ -21,10 +21,10 @@ services:
       - PLEX_CLAIM= #optional
     volumes:
       - /home/sky/docker-compose/plex/library:/config
-      - /mnt/a/plex/tv_shows:/tv
+      #- /mnt/a/plex/tv_shows:/tv
       - /mnt/b/plex/tv_shows:/tv2
       - /mnt/c/plex/tv_shows:/tv3
-      - /mnt/a/plex/movies:/movies
+      #- /mnt/a/plex/movies:/movies
       - /mnt/b/plex/movies:/movies2
       - /mnt/c/plex/movies:/movies3
     restart: unless-stopped
@@ -44,7 +44,7 @@ services:
       - HOST_WHITELIST= #optional
     volumes:
       - /home/sky/docker-compose/transmission/config:/config
-      - /mnt/a/transmission/downloads:/downloads
+      - /mnt/b/transmission/downloads:/downloads
       - /home/sky/docker-compose/transmission/watch:/watch
     ports:
       - 9091:9091
@@ -63,7 +63,7 @@ services:
       - RUN_OPTS= #optional
     volumes:
       - /home/sky/docker-compose/jackett/config:/config
-      - /mnt/a/transmission/downloads:/downloads
+      - /mnt/b/transmission/downloads:/downloads
     ports:
       - 9117:9117
     restart: unless-stopped
@@ -77,10 +77,10 @@ services:
       - TZ=America/Edmonton
     volumes:
       - /home/sky/docker-compose/sonarr/config:/config
-      - /mnt/a/plex/tv_shows:/tv
+      #- /mnt/a/plex/tv_shows:/tv
       - /mnt/b/plex/tv_shows:/tv2
       - /mnt/c/plex/tv_shows:/tv3
-      - /mnt/a/transmission/downloads:/downloads
+      - /mnt/b/transmission/downloads:/downloads
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -94,10 +94,10 @@ services:
       - TZ=America/Edmonton
     volumes:
       - /home/sky/docker-compose/radarr/config:/config
-      - /mnt/a/plex/movies:/movies
+      #- /mnt/a/plex/movies:/movies
       - /mnt/b/plex/movies:/movies2
       - /mnt/c/plex/movies:/movies3
-      - /mnt/a/transmission/downloads:/downloads
+      - /mnt/b/transmission/downloads:/downloads
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -111,10 +111,10 @@ services:
       - TZ=America/Edmonton
     volumes:
       - /home/sky/docker-compose/bazarr/config:/config
-      - /mnt/a/plex/tv_shows:/tv
+      #- /mnt/a/plex/tv_shows:/tv
       - /mnt/b/plex/tv_shows:/tv2
       - /mnt/c/plex/tv_shows:/tv3
-      - /mnt/a/plex/movies:/movies
+      #- /mnt/a/plex/movies:/movies
       - /mnt/b/plex/movies:/movies2
       - /mnt/c/plex/movies:/movies3
     ports:
