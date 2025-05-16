@@ -1,1 +1,14 @@
-[]
+- id: '1747288071056'
+  alias: Sunrise
+  description: ''
+  triggers:
+  - trigger: sun
+    event: sunrise
+    offset: 0
+  conditions: []
+  actions:
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: 'Suns up bitch '
+  mode: single
