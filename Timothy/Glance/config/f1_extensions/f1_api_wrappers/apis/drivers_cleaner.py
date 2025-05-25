@@ -1,0 +1,92 @@
+from fastapi import APIRouter
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.inmemory import InMemoryBackend
+import pycountry
+import httpx
+from datetime import datetime, timedelta
+import pytz
+
+router = APIRouter()
+LAST_RACE_API_URL = "http://192.168.0.80:4463/f1/next_race/"
+
+MT = pytz.timezone("America/Edmonton")
+
+# Initialize caching
+@router.on_event("startup")
+async def startup():
+    FastAPICache.init(InMemoryBackend())
+
+# The API uses some weird country names that don't match standard
+def country_to_code(country_name: str) -> str:
+    replacements = {
+        "Great Britain": "GB",
+        "United States": "US",
+    }
+    try:
+        country_name = replacements.get(country_name, country_name)
+        return pycountry.countries.lookup(country_name).alpha_2.lower()
+    except Exception:
+        return ""
+
+async def get_next_race_end():
+    async with httpx.AsyncClient() as client:
+        try:
+	   # Use f1_latest API to fetch race time for smart caching
+            r = await client.get(LAST_RACE_API_URL)
+            data = r.json()
+            race = data.get("race", [])[0]
+            schedule = race.get("schedule", {})
+            race_dt_str = schedule.get("race", {}).get("datetime_rfc3339")
+
+            if race_dt_str:
+                race_dt = datetime.fromisoformat(race_dt_str)
+                race_dt = race_dt.astimezone(MT)
+		# Refresh cache 4 hours after race start, idk when refreshes, may need adjustment
+                return race_dt + timedelta(hours=4)
+        except Exception as e:
+            print("Error fetching race time:", e)
+    return None
+
+@router.get("/", summary="Fetch current drivers championship")
+async def get_drivers_championship():
+    cache = FastAPICache.get_backend()
+    cache_key = "drivers_championship"
+
+    cached = await cache.get(cache_key)
+    if cached:
+        return cached
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get("https://f1api.dev/api/current/drivers-championship")
+        if response.status_code != 200:
+            return {"error": "Failed to fetch data"}
+
+        data = response.json()
+
+    drivers = data.get("drivers_championship", [])
+    results = []
+    for entry in drivers:
+
+        # Clean up team names and get rid of standard boilerplate slop
+        driver = entry.get("driver", {})
+        team = entry.get("team", {})
+        country = driver.get("nationality", "")
+        results.append({
+            "surname": driver.get("surname"),
+            "position": entry.get("position"),
+            "points": entry.get("points"),
+	    "teamId": team.get("teamId"),
+            "country": country,
+            "flag": country_to_code(country)
+        })
+
+    response_data = {"season": data.get("season"), "drivers": results}
+
+    # Cache until race ends or 1 hour (in case f1/last is down or something
+    race_end = await get_next_race_end()
+    if race_end:
+        expire = int((race_end - datetime.now(MT)).total_seconds()) 
+    else: 3600
+
+    await cache.set(cache_key, response_data, expire=expire)
+    return response_data

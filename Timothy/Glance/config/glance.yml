@@ -34,6 +34,8 @@ pages:
                     url: https://www.amazon.ca/
                   - title: Movie Rankings
                     url: https://docs.google.com/spreadsheets/d/1d-YPy20QbiuzhKRq7IFGd5rfE0Iq9imoFgyNbzKo1uc/edit?usp=sharing
+                  - title: Drive Health
+                    url: http://192.168.0.92:8020/web/dashboard
               - title: Entertainment
                 links:
                   - title: Plex
