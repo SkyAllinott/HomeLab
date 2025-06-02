@@ -42,7 +42,10 @@ async def get_dynamic_track_map():
         data = resp.json()
         race = data.get("race", [{}])[0]
         year = int(data.get("season", 2024)) - 1
-        gp = race.get("circuit", {}).get("circuitId", "")
+        circuit = race.get("circuit")
+        country = circuit.get("country")
+        city = circuit.get("city")
+        gp = city + " " + country
         race_dt_str = race.get("schedule", {}).get("race", {}).get("datetime_rfc3339")
 
         if not gp or not race_dt_str:
