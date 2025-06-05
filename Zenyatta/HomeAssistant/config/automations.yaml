@@ -4,11 +4,78 @@
   triggers:
   - trigger: sun
     event: sunrise
-    offset: 0
+    offset: -00:30:00
+  conditions:
+  - condition: template
+    value_template: '{% set sunrise = state_attr(''sun.sun'', ''next_rising'') | as_datetime
+      %}
+
+      {{ sunrise.hour < 7 or (sunrise.hour == 7 and sunrise.minute == 0) }}'
+  actions:
+  - action: light.turn_on
+    target:
+      entity_id: light.desk_bedroom_lamp
+    data:
+      transition: 3600
+      brightness_pct: 50
+  mode: single
+- id: '1748298008560'
+  alias: Welcome home
+  description: ''
+  triggers:
+  - trigger: zone
+    entity_id: device_tracker.skysphone
+    zone: zone.home
+    event: enter
   conditions: []
   actions:
-  - action: notify.notify
+  - choose:
+    - conditions:
+      - condition: sun
+        after: sunset
+        before: sunrise
+      sequence:
+      - action: light.turn_on
+        metadata: {}
+        data:
+          brightness_pct: 50
+        target:
+          entity_id: light.front_porch_light
+      - delay:
+          hours: 0
+          minutes: 5
+          seconds: 0
+          milliseconds: 0
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.front_porch_light
+      - action: notify.mobile_app_skysphone
+        metadata: {}
+        data:
+          message: light turned off for you
+    default:
+    - action: notify.mobile_app_skysphone
+      metadata: {}
+      data:
+        message: light not on for you
+  mode: single
+- id: '1749093107860'
+  alias: Sunrise lamp off
+  description: ''
+  triggers:
+  - trigger: time
+    at: 08:00:00
+  conditions: []
+  actions:
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.desk_bedroom_lamp
+  - action: notify.mobile_app_skysphone
     metadata: {}
     data:
-      message: 'Suns up bitch '
+      message: light turned off sunrise
   mode: single

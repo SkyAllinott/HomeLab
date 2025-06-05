@@ -10,3 +10,30 @@ services:
     restart: unless-stopped
     network_mode: host
     privileged: true
+
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    image: ghcr.io/koenkk/zigbee2mqtt:latest-dev
+    volumes:
+      - ./data:/app/data
+      - /run/udev:/run/udev:ro
+    ports:
+      - 8888:8888
+    environment:
+      - TZ=America/Edmonton
+    devices:
+      - /dev/ttyUSB0:/dev/ttyACM0
+    restart: unless-stopped
+    privileged: true
+
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquito
+    ports:
+      - "1883:1883"
+      - "9002:9001"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    restart: unless-stopped

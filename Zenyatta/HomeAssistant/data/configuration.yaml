@@ -1,0 +1,54 @@
+version: 4
+mqtt:
+  base_topic: zigbee2mqtt
+  server: mqtt://192.168.0.159:1883
+serial:
+  port: /dev/ttyUSB0
+  adapter: ezsp
+  baudrate: 115200
+  rtscts: false
+advanced:
+  log_level: info
+  channel: 11
+  network_key:
+    - 127
+    - 50
+    - 210
+    - 144
+    - 144
+    - 17
+    - 23
+    - 205
+    - 28
+    - 217
+    - 222
+    - 213
+    - 132
+    - 138
+    - 208
+    - 196
+  pan_id: 39429
+  ext_pan_id:
+    - 138
+    - 139
+    - 209
+    - 22
+    - 28
+    - 56
+    - 89
+    - 237
+frontend:
+  enabled: true
+  port: 8888
+homeassistant:
+  enabled: true
+onboarding: false
+devices:
+  '0xb4e842864e4c0000':
+    friendly_name: desk bedroom lamp
+  '0xb4e842867dab0000':
+    friendly_name: front porch light
+  '0x282c02bfffeec061':
+    friendly_name: Servers downstairs
+  '0x282c02bfffeebbab':
+    friendly_name: Office PC
