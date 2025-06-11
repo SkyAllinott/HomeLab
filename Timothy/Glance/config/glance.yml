@@ -30,24 +30,32 @@ pages:
                 links:
                   - title: Github
                     url: https://github.com/
+                    same-tab: true
                   - title: Amazon
                     url: https://www.amazon.ca/
+                    same-tab: true
                   - title: Movie Rankings
                     url: https://docs.google.com/spreadsheets/d/1d-YPy20QbiuzhKRq7IFGd5rfE0Iq9imoFgyNbzKo1uc/edit?usp=sharing
+                    same-tab: true
                   - title: Drive Health
                     url: http://192.168.0.92:8020/web/dashboard
+                    same-tab: true
               - title: Entertainment
                 links:
                   - title: Plex
                     url: https://app.plex.tv/desktop/#!/
+                    same-tab: true
                   - title: YouTube
                     url: https://www.youtube.com/
+                    same-tab: true
               - title: Social
                 links:
                   - title: Reddit
                     url: https://old.reddit.com/
+                    same-tab: true
                   - title: Twitter
                     url: https://x.com/home
+                    same-tab: true
 
           - type: custom-api
             title: Uptime Kuma
