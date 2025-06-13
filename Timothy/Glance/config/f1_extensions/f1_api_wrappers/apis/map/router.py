@@ -4,6 +4,7 @@ import httpx
 import io
 from datetime import datetime, timedelta
 import pytz
+import os
 
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.inmemory import InMemoryBackend
@@ -11,7 +12,7 @@ from .map_generator import generate_track_map_svg
 
 router = APIRouter()
 
-LAST_RACE_API_URL = "http://192.168.0.80:4463/f1/next_race/"
+LAST_RACE_API_URL = "http://localhost:4463/f1/next_race/"
 
 MT = pytz.timezone("America/Edmonton")
 UTC = pytz.utc
@@ -35,8 +36,11 @@ async def get_dynamic_track_map():
         try:
             resp = await client.get(LAST_RACE_API_URL)
             resp.raise_for_status()
-        except httpx.HTTPError as e:
+        except Exception as e:
+            print("Fetch error:", e)
+            print("URL:", LAST_RACE_API_URL)
             return PlainTextResponse(f"Failed to fetch race info: {str(e)}", status_code=502)
+        
 
     try:
         data = resp.json()
@@ -62,7 +66,8 @@ async def get_dynamic_track_map():
             else:
                 expire = 60 * 5 # Fall back in case cache expired, shouldn't raise but yeah.
         except Exception as e:
-            print("Failed to parse race time:", e)
+            print("Error fetching race time:", e)
+            print("Used URL:", LAST_RACE_API_URL)
             expire = 60 * 60  # fallback: 1 hour if can't fetch next race data
 
         print("Cache expired: Fetching track map for " + str(gp) + " " + str(year))

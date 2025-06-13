@@ -5,9 +5,13 @@ import pycountry
 import httpx
 from datetime import datetime, timedelta
 import pytz
+import os
 
 router = APIRouter()
-LAST_RACE_API_URL = "http://192.168.0.80:4463/f1/next_race/"
+
+
+
+LAST_RACE_API_URL = "http://localhost:4463/f1/next_race/"
 
 MT = pytz.timezone("America/Edmonton")
 
@@ -45,6 +49,7 @@ async def get_next_race_end():
                 return race_dt + timedelta(hours=4)
         except Exception as e:
             print("Error fetching race time:", e)
+            print("Used URL:", LAST_RACE_API_URL)
     return None
 
 @router.get("/", summary="Fetch current drivers championship")
@@ -66,7 +71,6 @@ async def get_drivers_championship():
     drivers = data.get("drivers_championship", [])
     results = []
     for entry in drivers:
-
         # Clean up team names and get rid of standard boilerplate slop
         driver = entry.get("driver", {})
         team = entry.get("team", {})
@@ -75,7 +79,7 @@ async def get_drivers_championship():
             "surname": driver.get("surname"),
             "position": entry.get("position"),
             "points": entry.get("points"),
-	    "teamId": team.get("teamId"),
+	        "teamId": team.get("teamId"),
             "country": country,
             "flag": country_to_code(country)
         })
@@ -86,7 +90,8 @@ async def get_drivers_championship():
     race_end = await get_next_race_end()
     if race_end:
         expire = int((race_end - datetime.now(MT)).total_seconds()) 
-    else: 3600
+    else: 
+        expire = 3600
 
     await cache.set(cache_key, response_data, expire=expire)
     return response_data
