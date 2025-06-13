@@ -12,6 +12,9 @@ services:
 
   f1_api:
     container_name: f1_api
+    environment:
+      - TIMEZONE=America/Edmonton
+      - TRACK_COLOUR=#e5d486
     build:
       context: ./config/f1_extensions/f1_api_wrappers
     ports:

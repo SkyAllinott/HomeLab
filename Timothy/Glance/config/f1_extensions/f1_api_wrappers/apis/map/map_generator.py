@@ -2,11 +2,17 @@ import fastf1
 import numpy as np
 import svgwrite
 import io
+import os 
+import re
 
 def generate_track_map_svg(year: int, gp: str, session_type: str = "Q") -> str:
     # Matches glance yellow
-    highlight_yellow = '#e5d486'
-    white = '#ffffff'
+    track_color = os.environ['TRACK_COLOUR'].strip()
+
+    match = re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', track_color)
+
+    if not match:
+        raise ValueError("Not a valid hex string")
 
     # Load data from f1 API
     session = fastf1.get_session(year, gp, session_type)
@@ -64,9 +70,9 @@ def generate_track_map_svg(year: int, gp: str, session_type: str = "Q") -> str:
     dwg.defs.add(dwg.style(f"""
         .{track_class} {{
             fill: none;
-            stroke: {highlight_yellow};
+            stroke: {track_color};
             stroke-width: 40;
-            filter: drop-shadow(0 0 40px white), drop-shadow(0 0 70px {highlight_yellow});
+            filter: drop-shadow(0 0 40px white), drop-shadow(0 0 70px {track_color});
         }}"""))
 
     dwg.add(dwg.polyline(points=points, class_=track_class, fill='none'))
