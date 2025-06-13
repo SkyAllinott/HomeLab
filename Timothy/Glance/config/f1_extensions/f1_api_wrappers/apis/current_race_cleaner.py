@@ -9,7 +9,7 @@ import os
 router = APIRouter()
 
 # Timezone information
-TZ = os.environ.get("TIMEZONE", "America/Edmonton").strip()
+TZ = os.environ.get("TIMEZONE").strip()
 if TZ not in pytz.all_timezones:
     raise ValueError('Invalid time zone selection')
 MT = pytz.timezone(TZ)

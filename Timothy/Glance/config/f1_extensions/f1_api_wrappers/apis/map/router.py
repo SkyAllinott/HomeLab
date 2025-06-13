@@ -14,7 +14,7 @@ router = APIRouter()
 
 LAST_RACE_API_URL = "http://localhost:4463/f1/next_race/"
 
-TZ = os.environ.get("TIMEZONE", "America/Edmonton").strip()Add commentMore actions
+TZ = os.environ.get("TIMEZONE").strip()
 if TZ not in pytz.all_timezones:
     raise ValueError('Invalid time zone selection')
 MT = pytz.timezone(TZ)
