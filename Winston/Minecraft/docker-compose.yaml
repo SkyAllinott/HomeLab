@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  minecraft:
+    image: itzg/minecraft-server
+    container_name: minecraft
+    ports:
+      - "25565:25565"
+    stdin_open: true
+    tty: true
+    environment:
+      EULA: "TRUE"
+      MEMORY: 8G
+      TYPE: VANILLA
+      VERSION: "1.21.5"
+      MOTD: "We cannot stop mpreg research"
+      DIFFICULTY: normal
+      OPS: |
+        SLEEBYSKY
+      ICON: https://avatars.githubusercontent.com/u/52394699?v=4
+      OVERRIDE_ICON: TRUE
+    volumes:
+      - ./data:/data
+    restart: unless-stopped

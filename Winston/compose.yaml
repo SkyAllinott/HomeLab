@@ -4,3 +4,4 @@ include:
   - ./Media/docker-compose.yaml
   - ./Monitoring/docker-compose.yaml
   - ./Networking/docker-compose.yaml
+  - ./Minecraft/docker-compose.yaml
