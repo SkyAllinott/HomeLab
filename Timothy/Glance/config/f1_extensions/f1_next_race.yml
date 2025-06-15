@@ -30,6 +30,7 @@
           <img
             src="http://192.168.0.80:4463/f1/next_map/"
             alt="Track Map"
+            title={{$session.String "circuit.circuitName" }}
             style="max-width: 100%; height: auto; border-radius: 8px;"
           />
         </div>
