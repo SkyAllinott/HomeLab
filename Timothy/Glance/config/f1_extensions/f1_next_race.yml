@@ -13,7 +13,7 @@
         <p class="color-highlight">{{ $session.String "raceName" }}</p>
         <p class="color-primary">
           <span>
-            Race
+            {{ .JSON.String "next_event.session" }}
           </span>
           {{ $datetime := $session.String "schedule.race.datetime_rfc3339" }}
           <span

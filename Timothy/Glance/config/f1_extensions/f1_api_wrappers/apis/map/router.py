@@ -24,6 +24,24 @@ MT = pytz.timezone(TZ)
 async def startup():
     FastAPICache.init(InMemoryBackend())
 
+async def get_next_race_end():
+    async with httpx.AsyncClient() as client:
+        try:
+	   # Use f1_latest API to fetch race time for smart caching
+            r = await client.get(LAST_RACE_API_URL)
+            data = r.json()
+            next_event = data.get("next_event", {})
+            race_dt_str = next_event.get("datetime")
+
+            if race_dt_str:
+                race_dt = datetime.fromisoformat(race_dt_str)
+                race_dt = race_dt.astimezone(MT)
+            return race_dt
+        except Exception as e:
+            print("Error fetching race time:", e)
+            print("Used URL:", LAST_RACE_API_URL)
+    return None
+
 @router.get("/", summary="Fetch next track map")
 async def get_dynamic_track_map():
     cache_key = "track_map_svg"
@@ -57,23 +75,23 @@ async def get_dynamic_track_map():
         if not gp or not race_dt_str:
             raise ValueError("Missing circuitId or race time in API response")
 
-        # Parse race time and calculate cache expiry based on next race time
+        # Cacge logic.
+        # Doesn't use same logic as current/drivers/constructors due to not needing to
+        # reload the track map between weekend events 
         try:
             if race_dt_str:
-                race_dt = datetime.fromisoformat(race_dt_str)
-                race_dt = race_dt.astimezone(MT)
+                race_dt = datetime.fromisoformat(race_dt_str).astimezone(MT)
 
                 # Expire 4 hours after race time
                 expire = int((race_dt + timedelta(hours=4) - datetime.now(MT)).total_seconds())
             else:
-                expire = 60 * 5 # Fall back in case cache expired, shouldn't raise but yeah.
+                expire = 3600 # Fall back in case cache expired, shouldn't raise but yeah.
         except Exception as e:
-            print("Error fetching race time:", e)
-            print("Used URL:", LAST_RACE_API_URL)
-            expire = 60 * 60  # fallback: 1 hour if can't fetch next race data
+            print("Cache expiry fallback due to error:", e)
+            expire = 3600  # fallback: 1 hour if can't fetch next race data
 
         print("Cache expired: Fetching track map for " + str(gp) + " " + str(year))
-        svg_content = generate_track_map_svg(year, gp, "Q")
+        svg_content = generate_track_map_svg(year, gp, circuit.get("circuitName"), "Q")
         svg_bytes = svg_content.encode("utf-8")
         await cache.set(cache_key, svg_content, expire=expire)
 
