@@ -46,17 +46,18 @@ async def get_next_race():
         except Exception as e:
             return {"error": f"Exception while fetching: {e}"}
 
-    now = datetime.utcnow().date()
+    now = datetime.utcnow()
     races = sorted(calendar_data.get("races", []), key=lambda r: r.get("schedule", {}).get("race", {}).get("date", ""))
 
     # Loop through list in order until find first race with date past today. 
     next_race = None
     for race in races:
         race_date_str = race.get("schedule", {}).get("race", {}).get("date")
-        if not race_date_str:
+        race_time_str = race.get("schedule", {}).get("race", {}).get("time")
+        if not race_date_str or not race_time_str:
             continue
-        race_date = datetime.strptime(race_date_str, "%Y-%m-%d").date()
-        if race_date >= now:
+        race_datetime = datetime.strptime(f"{race_date_str}T{race_time_str}", "%Y-%m-%dT%H:%M:%SZ")
+        if race_datetime >= now:
             next_race = race
             break
 
@@ -127,19 +128,29 @@ async def get_next_race():
     }
 
     next_event = None
-    detail_level = os.environ.get("EVENT_DETAIL").strip()
+    try:
+        detail_level = os.environ.get("EVENT_DETAIL").strip()
+    except Exception:
+        detail_level = 'main'
+
     for session_name, session_data in sorted_schedule:
         event_date_str = session_data.get("datetime_rfc3339")
         if not event_date_str:
             continue
-        
+
         if detail_level == "main":
+            print("Showing Quali and Race Events Only")
             if session_name in ('fp1', 'fp2', 'fp3'):
                 continue
-        
-        if detail_level == "race":
-            if session_name not in ('race'):
+        elif detail_level == "race":
+            print("Showing Races Only")
+            if session_name not in ('race', 'sprintRace'):
                 continue
+        elif detail_level == "detailed":
+            print("Showing All Events")
+        else:
+            raise ValueError("Select one of: 'main', 'race', or 'detailed'. No selection defaults to main.")
+
         try:
             dt = datetime.fromisoformat(event_date_str)
             if dt > datetime.now(MT): 
