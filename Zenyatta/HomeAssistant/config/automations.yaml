@@ -74,8 +74,4 @@
     data: {}
     target:
       entity_id: light.desk_bedroom_lamp
-  - action: notify.mobile_app_skysphone
-    metadata: {}
-    data:
-      message: light turned off sunrise
   mode: single
