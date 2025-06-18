@@ -13,7 +13,7 @@ services:
       MEMORY: 8G
       TYPE: VANILLA
       VIEW_DISTANCE: 32
-      VERSION: "1.21.5"
+      VERSION: "1.21.6"
       MOTD: "Meow =^-^="
       DIFFICULTY: normal
       OPS: |
