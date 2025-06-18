@@ -1,11 +1,12 @@
 import fastf1
 import numpy as np
 import svgwrite
+from svgwrite.base import Title
 import io
 import os 
 import re
 
-def generate_track_map_svg(year: int, gp: str, session_type: str = "Q") -> str:
+def generate_track_map_svg(year: int, gp: str, track: str, session_type: str = "Q") -> str:
     # Matches glance yellow
     track_color = os.environ['TRACK_COLOUR'].strip()
 
@@ -69,13 +70,16 @@ def generate_track_map_svg(year: int, gp: str, session_type: str = "Q") -> str:
     # Have to have a super thick line
     dwg.defs.add(dwg.style(f"""
         .{track_class} {{
-            fill: none;
+            fill: transparent;
             stroke: {track_color};
             stroke-width: 40;
+            title: {track};
             filter: drop-shadow(0 0 40px white), drop-shadow(0 0 70px {track_color});
         }}"""))
 
-    dwg.add(dwg.polyline(points=points, class_=track_class, fill='none'))
+    polyline = dwg.polyline(points=points, class_=track_class, fill='none')
+    polyline.elements.append(Title(track))
+    dwg.add(polyline)
     dwg.write(svg_buf)
 
     return svg_buf.getvalue()

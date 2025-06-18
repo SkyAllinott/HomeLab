@@ -46,17 +46,18 @@ async def get_next_race():
         except Exception as e:
             return {"error": f"Exception while fetching: {e}"}
 
-    now = datetime.utcnow().date()
+    now = datetime.utcnow()
     races = sorted(calendar_data.get("races", []), key=lambda r: r.get("schedule", {}).get("race", {}).get("date", ""))
 
     # Loop through list in order until find first race with date past today. 
     next_race = None
     for race in races:
         race_date_str = race.get("schedule", {}).get("race", {}).get("date")
-        if not race_date_str:
+        race_time_str = race.get("schedule", {}).get("race", {}).get("time")
+        if not race_date_str or not race_time_str:
             continue
-        race_date = datetime.strptime(race_date_str, "%Y-%m-%d").date()
-        if race_date > now:
+        race_datetime = datetime.strptime(f"{race_date_str}T{race_time_str}", "%Y-%m-%dT%H:%M:%SZ")
+        if race_datetime >= now:
             next_race = race
             break
 
@@ -105,21 +106,85 @@ async def get_next_race():
     else:
         next_race["totalDistanceKm"] = None
 
+
+    # Select next event
+    def get_datetime(item):
+        dt_str = item[1].get("datetime_rfc3339")
+        try:
+            return datetime.fromisoformat(dt_str) if dt_str else datetime.max.replace(tzinfo=MT)
+        except Exception:
+            return datetime.max.replace(tzinfo=MT)
+
+    sorted_schedule = sorted(schedule.items(), key=get_datetime)
+
+    session_name_readable = {
+        "fp1": "Free Practice 1",
+        "fp2": "Free Practice 2",
+        "fp3": "Free Practice 3",
+        "qualy": "Qualifying",
+        "sprintQualy": "Sprint Qualifying",
+        "sprintRace": "Sprint Race",
+        "race": "Race"
+    }
+
+    next_event = None
+    try:
+        detail_level = os.environ.get("EVENT_DETAIL").strip()
+    except Exception:
+        detail_level = 'main'
+
+    for session_name, session_data in sorted_schedule:
+        event_date_str = session_data.get("datetime_rfc3339")
+        if not event_date_str:
+            continue
+
+        if detail_level == "main":
+            print("Showing Quali and Race Events Only")
+            if session_name in ('fp1', 'fp2', 'fp3'):
+                continue
+        elif detail_level == "race":
+            print("Showing Races Only")
+            if session_name not in ('race', 'sprintRace'):
+                continue
+        elif detail_level == "detailed":
+            print("Showing All Events")
+        else:
+            raise ValueError("Select one of: 'main', 'race', or 'detailed'. No selection defaults to main.")
+
+        try:
+            dt = datetime.fromisoformat(event_date_str)
+            if dt > datetime.now(MT): 
+                next_event = {
+                    "session": session_name_readable.get(session_name, session_name.title()),
+                    "datetime": event_date_str
+                }
+                break
+        except Exception:
+            continue
+
+
     # Cache expiry logic based on race time
     try:
-        race_dt_str = schedule.get("race", {}).get("datetime_rfc3339")
+        race_dt_str = next_event.get("datetime")
         if race_dt_str:
             race_dt = datetime.fromisoformat(race_dt_str).astimezone(MT)
+            expiry_dt = race_dt + timedelta(hours=4)
             expire = int((race_dt + timedelta(hours=4) - datetime.now(MT)).total_seconds())
         else:
+            expiry_dt = datetime.now(MT) + timedelta(hours=1)
             expire = 3600  # fallback
     except Exception as e:
         print("Cache expiry fallback due to error:", e)
+        expiry_dt = datetime.now(MT) + timedelta(hours=1)
         expire = 3600
 
+    # Output data
     response_data = {
         "season": calendar_data.get("season"),
+        "round": next_race.get("round"),
         "timezone": TZ,
+        "next_event": next_event,
+        "cache_expires": expiry_dt.isoformat(),
         "race": [next_race]
     }
 
