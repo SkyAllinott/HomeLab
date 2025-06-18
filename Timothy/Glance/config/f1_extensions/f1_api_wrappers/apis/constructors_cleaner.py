@@ -40,15 +40,13 @@ async def get_next_race_end():
 	   # Use f1_latest API to fetch race time for smart caching
             r = await client.get(LAST_RACE_API_URL)
             data = r.json()
-            race = data.get("race", [])[0]
-            schedule = race.get("schedule", {})
-            race_dt_str = schedule.get("race", {}).get("datetime_rfc3339")
+            next_event = data.get("next_event", {})
+            race_dt_str = next_event.get("datetime")
 
             if race_dt_str:
                 race_dt = datetime.fromisoformat(race_dt_str)
                 race_dt = race_dt.astimezone(MT)
-		# Refresh cache 4 hours after race start, idk when refreshes, may need adjustment
-                return race_dt + timedelta(hours=4)
+            return race_dt
         except Exception as e:
             print("Error fetching race time:", e)
             print("Used URL:", LAST_RACE_API_URL)
@@ -90,14 +88,19 @@ async def get_constructors_championship():
             "wiki": team.get("url")
         })
 
-    response_data = {"season": data.get("season"), "constructors": results}
-
-    # Cache until race ends or 1 hour (in case f1/last is down or something
-    race_end = await get_next_race_end()
-    if race_end:
-        expire = int((race_end - datetime.now(MT)).total_seconds()) 
+    # Cache until event ends or 1 hour (in case f1/last is down or something
+    event_end = await get_next_race_end()
+    if event_end:
+        expire = int((event_end - datetime.now(MT)).total_seconds()) 
+        expiry_dt = event_end + timedelta(hours=4)
     else: 
         expire = 3600
+        expiry_dt = datetime.now(MT) + timedelta(hours=1)
+
+    response_data = {
+        "season": data.get("season"), 
+        "cache_expires": expiry_dt.isoformat(),
+        "constructors": results}
 
     await cache.set(cache_key, response_data, expire=expire)
     return response_data

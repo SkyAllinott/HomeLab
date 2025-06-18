@@ -15,6 +15,7 @@ services:
     environment:
       - TIMEZONE=America/Edmonton
       - TRACK_COLOUR=#e5d486
+      - EVENT_DETAIL=main
     build:
       context: ./config/f1_extensions/f1_api_wrappers
     ports:

@@ -13,7 +13,7 @@
         <p class="color-highlight">{{ $session.String "raceName" }}</p>
         <p class="color-primary">
           <span>
-            Race
+            {{ .JSON.String "next_event.session" }}
           </span>
           {{ $datetime := $session.String "schedule.race.datetime_rfc3339" }}
           <span
@@ -30,6 +30,7 @@
           <img
             src="http://192.168.0.80:4463/f1/next_map/"
             alt="Track Map"
+            title={{$session.String "circuit.circuitName" }}
             style="max-width: 100%; height: auto; border-radius: 8px;"
           />
         </div>
