@@ -13,7 +13,7 @@ services:
       MEMORY: 8G
       TYPE: VANILLA
       VIEW_DISTANCE: 32
-      VERSION: "1.21.6"
+      VERSION: "1.21.7"
       MOTD: "Meow =^-^="
       DIFFICULTY: normal
       OPS: |
@@ -23,3 +23,24 @@ services:
     volumes:
       - ./data:/data
     restart: unless-stopped
+
+  atm10:
+    build: 
+      context: ./minecraft-atm10
+      dockerfile: Dockerfile
+    container_name: minecraftmodded
+    volumes:
+      - ./minecraft-atm10/data:/app/data
+    ports:
+      - "25566:25565"
+    environment: 
+      EULA: "TRUE"
+      MEMORY: 10G
+      VIEW_DISTANCE: 16
+      OPS: |
+        PoisonIvysoar
+        IvySauryn
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+      
