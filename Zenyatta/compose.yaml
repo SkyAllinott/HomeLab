@@ -4,3 +4,4 @@ include:
   - ./Monitoring/docker-compose.yaml
   - ./Ghostfolio/docker-compose.yaml
   - ./HomeAssistant/docker-compose.yaml
+  - ./F1/docker-compose.yaml

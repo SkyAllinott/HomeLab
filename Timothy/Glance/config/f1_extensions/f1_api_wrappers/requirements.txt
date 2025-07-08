@@ -1,9 +1,0 @@
-fastapi
-uvicorn
-httpx
-fastf1
-pycountry
-pytz
-fastapi-cache2
-svgwrite
-numpy

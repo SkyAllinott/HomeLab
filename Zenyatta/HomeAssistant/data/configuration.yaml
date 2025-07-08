@@ -52,3 +52,7 @@ devices:
     friendly_name: Servers downstairs
   '0x282c02bfffeebbab':
     friendly_name: Office PC
+  '0xb4e842865f870000':
+    friendly_name: Bedside Lamp
+  '0x7cb94c6b8cc80000':
+    friendly_name: Office Light

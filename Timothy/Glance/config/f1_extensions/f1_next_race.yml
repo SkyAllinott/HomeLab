@@ -1,7 +1,7 @@
 - type: custom-api
   title: Next Race
   cache: 5m
-  url: http://192.168.0.80:4463/f1/next_race/
+  url: http://192.168.0.159:4463/f1/next_race/
   template: |
     <div class="flex flex-column gap-10">
       {{ $session := index (.JSON.Array "race") 0 }}
@@ -15,22 +15,20 @@
           <span>
             {{ .JSON.String "next_event.session" }}
           </span>
-          {{ $datetime := $session.String "schedule.race.datetime_rfc3339" }}
+          {{ $datetime := .JSON.String "next_event.datetime" }}
           <span
             class="color-highlight"
-            title="{{ $session.String "schedule.race.date" }}"
             {{ parseRelativeTime "rfc3339" $datetime }}
           ></span>
         </p>
         <p class="size-h5">
-          {{ $session.String "schedule.race.date" }} @  {{ $session.String "schedule.race.time" }}MT
+          {{ .JSON.String "next_event.date" }} @  {{ .JSON.String "next_event.time" }}
         </p>
 
         <div style="margin-block: 1rem;">
           <img
-            src="http://192.168.0.80:4463/f1/next_map/"
-            alt="Track Map"
-            title={{$session.String "circuit.circuitName" }}
+            src="http://192.168.0.159:4463/f1/next_map/"
+            onerror="this.style.display='none'"
             style="max-width: 100%; height: auto; border-radius: 8px;"
           />
         </div>
