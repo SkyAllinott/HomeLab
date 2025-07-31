@@ -8,4 +8,6 @@ services:
       - /home/timothy/HomeLab/Timothy/Glance/config:/app/config
     ports:
       - 8081:8080
+    env_file:
+      - glance.env
     restart: unless-stopped

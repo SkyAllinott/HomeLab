@@ -202,7 +202,6 @@ pages:
       - size: small
         widgets:
 
-# To be added
   - name: Server
     width: wide
     columns:
@@ -229,4 +228,19 @@ pages:
             - linuxserver/docker-plex
             - glanceapp/glance
             - pi-hole/pi-hole
+
+  - name: Tautulli
+    width: wide
+    columns:
+      - size: small
+        widgets:
+          !include: ./tautulli/recently_added.yml
+
+      - size: full
+        widgets:
+          !include: ./tautulli/recently_added.yml
+
+      - size: small
+        widgets:
+          !include: ./f1_extensions/f1_next_race.yml
 
