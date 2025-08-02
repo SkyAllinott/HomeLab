@@ -72,33 +72,18 @@
                 style="width: 100%; height: auto; object-fit: cover;" />
             </div>
 
-            {{ if $isEpisode }}
-              <div class="color-highlight" 
-                style="margin-top: 0.25rem; height: 2em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
-                title = {{ $v.String "grandparent_title" }} 
-                  >
-                {{ $v.String "grandparent_title" }} 
-              </div>
-              <div class="color-highlight" 
-                style="margin-top: 0.1rem; height: 2em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
-                title = "{{ $titleHover }}"
-                  >
-                S{{ ($v.Int "parent_media_index") }}&thinsp;·&thinsp;E{{ ($v.Int "media_index") }}
-              </div>
           
-            {{ else if $isMovie }}
-              <div class="color-highlight" 
-                style="margin-top: 0.25rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
-                title="{{ $v.String "title" }}"
-                >
-                {{ $v.String "title" }}
-              </div>
-              <div class="color-highlight" 
-                style="margin-top: 0.25rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
-                >
-                {{ $v.Int "year" }}
-              </div>
-            {{ end }}
+            <div class="color-highlight" 
+              style="margin-top: 0.25rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
+              title="{{ $v.String "title" }}"
+              >
+              {{ $v.String "title" }}
+            </div>
+            <div class="color-highlight" 
+              style="margin-top: 0.25rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
+              >
+              {{ $v.Int "year" }}
+            </div>
             {{ $seconds := $v.Int "total_duration" }}
             {{ $hours := div $seconds 3600 }}
             {{ $minutes := mod (div $seconds 60) 60 }}
@@ -157,27 +142,17 @@
                style="width: 50px; margin-right: 1.5rem;"
                class="rounded w-10 h-10 object-cover" />
           <div class="min-width-0 grow">
-            {{ if $isEpisode }}
-              <div class="color-highlight" title="{{ $v.String "grandparent_title" }}"
-                style = "overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                {{ $v.String "grandparent_title" }} 
-              </div>
-              <div class="color-highlight" title="{{ $v.String "grandchild_title" }}">
-                S{{ ($v.Int "parent_media_index") }}&thinsp;·&thinsp;E{{ ($v.Int "media_index") }}
-              </div>
-            {{ else if $isMovie }}
-              <div class="color-highlight" 
-                style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
-                title="{{ $v.String "title" }}"
-                >
-                {{ $v.String "title" }}
-              </div>
-              <div class="color-highlight" 
-                style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
-                >
-                {{ $v.Int "year" }}
-              </div>
-            {{ end }}
+            <div class="color-highlight" 
+              style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
+              title="{{ $v.String "title" }}"
+              >
+              {{ $v.String "title" }}
+            </div>
+            <div class="color-highlight" 
+              style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
+              >
+              {{ $v.Int "year" }}
+            </div>
 
             {{ $seconds := $v.Int "total_duration" }}
             {{ $hours := div $seconds 3600 }}
