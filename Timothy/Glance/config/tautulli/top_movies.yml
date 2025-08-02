@@ -1,7 +1,14 @@
 - type: custom-api
   title: Top Movies
   cache: 60m
-  url: http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=get_home_stats&stat_id=top_movies&stats_type=duration&time_range=90
+  url: http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?
+  allow-potentially-dangerous-html: true
+  parameters:
+    time_range: 90
+    apikey: ${TAUTULLI_API_KEY}
+    cmd: get_home_stats
+    stat_id: top_movies
+    stats_type: duration
   template: |
     {{ $isLarge := eq (.Options.StringOr "size" "large") "large" }}
     {{ $serverID := "${SERVER_ID}" }}
