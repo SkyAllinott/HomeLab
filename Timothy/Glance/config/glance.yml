@@ -253,6 +253,10 @@ pages:
             options: 
               size: "large"
 
+          !include: ./tautulli/top_shows.yml
+            options: 
+              size: "large"
+
       - size: small
         widgets:
           !include: ./tautulli/top_shows.yml

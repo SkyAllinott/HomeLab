@@ -5,7 +5,7 @@
   template: |
     {{ $isLarge := eq (.Options.StringOr "size" "large") "large" }}
     {{ $serverID := "${SERVER_ID}" }}
-    {{ $uniqueID := "top_movies" }}
+    {{ $uniqueID := "top_shows" }}
 
 
     <!-- Widget version when large-->
