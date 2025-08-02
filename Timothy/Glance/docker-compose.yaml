@@ -10,4 +10,6 @@ services:
       - 8081:8080
     env_file:
       - glance.env
+    environment:
+      - TZ=America/Edmonton
     restart: unless-stopped

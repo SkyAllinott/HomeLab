@@ -234,13 +234,25 @@ pages:
     columns:
       - size: small
         widgets:
-          !include: ./tautulli/recently_added.yml
-
+          !include: ./tautulli/recently_watched.yml
+            options: 
+              size: "small"
+          
+          !include: ./tautulli/top_movies.yml
+            options: 
+              size: "small"
+          
+          !include: ./tautulli/now_playing.yml
       - size: full
         widgets:
-          !include: ./tautulli/recently_added.yml
+          !include: ./tautulli/recently_watched.yml
+            options:
+              size: "large"
+
+          !include: ./tautulli/top_movies.yml
+            options: 
+              size: "large"
 
       - size: small
         widgets:
-          !include: ./f1_extensions/f1_next_race.yml
 
