@@ -1,6 +1,6 @@
 - type: custom-api
   title: Recently Watched
-  cache: 30m
+  cache: 5m
   url: http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=get_home_stats&stat_id=last_watched
   template: |
     {{ $isLarge := eq (.Options.StringOr "size" "large") "large" }}

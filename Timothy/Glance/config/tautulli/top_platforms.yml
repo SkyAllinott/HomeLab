@@ -1,5 +1,5 @@
 - type: custom-api
-  title: Top Movies
+  title: Top Platforms
   cache: 60m
   url: http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?
   allow-potentially-dangerous-html: true
@@ -7,12 +7,12 @@
     time_range: 90
     apikey: ${TAUTULLI_API_KEY}
     cmd: get_home_stats
-    stat_id: top_movies
+    stat_id: top_platforms
     stats_type: duration
   template: |
     {{ $isLarge := eq (.Options.StringOr "size" "large") "large" }}
     {{ $serverID := "${SERVER_ID}" }}
-    {{ $uniqueID := "top_movies" }}
+    {{ $uniqueID := "top_platforms" }}
 
 
     <!-- Widget version when large-->
@@ -56,46 +56,32 @@
           {{ $isEpisode := eq $type "episode" }}
           {{ $isMovie := eq $type "movie" }}
           {{ $ratingKey := $v.String "rating_key" }}
+          {{ $platforms := $v.String "platform_name" }}
+          {{ $img := printf "interfaces/default/images/platforms/%s.svg" $platforms }}
 
-          <a 
-            href="https://app.plex.tv/desktop/#!/server/${SERVER_ID}/details?key=%2Flibrary%2Fmetadata%2F{{ $ratingKey }}"
-            target="_blank"
+          <div 
             style=
               "min-width: 160px; 
               text-align: center; 
               text-decoration: none;">
-            
-            {{ $titleHover := "" }}
-            {{ if $isEpisode }}
-              {{ $titleHover = $v.String "grandchild_title" }}
-            {{ else if $isMovie }}
-              {{ $titleHover = $v.String "title" }}
-            {{ end }}
           
-            <div style="max-height: 250px; overflow: hidden; border-radius: 6px;">
-              <img src="http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=pms_image_proxy&img={{ $v.String "thumb" }}"
+            <div style="max-height: 225px; overflow: hidden; border-radius: 6px;" class = "color-primary">
+              <img src="http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=pms_image_proxy&img={{ $img }}"
                 alt="thumb"
-                title="{{ $titleHover }}"
-                style="width: 100%; height: auto; object-fit: cover;" />
+                title="{{ $v.String "platform" }}"
+                style="width: 100%; height: auto; object-fit: cover; padding-right: 25px; padding-left: 25px;" />
             </div>
 
           
             <div class="color-highlight" 
               style="margin-top: 0.25rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
-              title="{{ $v.String "title" }}"
+              title="{{ $v.String "platform" }}"
               >
-              {{ $v.String "title" }}
-            </div>
-            <div class="color-highlight" 
-              style="margin-top: 0.25rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
-              >
-              {{ $v.Int "year" }}
+              {{ $v.String "platform" }}
             </div>
             {{ $seconds := $v.Int "total_duration" }}
             {{ $hours := div $seconds 3600 }}
             {{ $minutes := mod (div $seconds 60) 60 }}
-            {{ $plays := $v.Int "total_plays" }}
-
             <div class="color-primary">
               <span title = "{{ $v.String "player" }}"> 
                 {{ if gt $hours 0 }}
@@ -106,14 +92,10 @@
               </span>
               <br>
               <span>
-                {{ if gt $plays 1 }}
-                  {{ $plays }} Plays
-                {{ else }}
-                  {{ $plays }} Play
-                {{ end }}
+                {{ $v.String "total_plays" }} Plays
               </span> 
             </div>
-          </a>
+          </div>
         {{ end }}
       </div>
 
@@ -148,31 +130,26 @@
         {{ $isEpisode := eq $type "episode" }}
         {{ $isMovie := eq $type "movie" }}
         {{ $ratingKey := $v.String "rating_key" }}
+        {{ $platforms := $v.String "platform_name" }}
+        {{ $img := printf "interfaces/default/images/platforms/%s.svg" $platforms }}
 
         <li class="flex items-center gap-2" style="padding: 0.5rem 0; border-bottom: 1px solid var(--color-border);">
-          <img src="http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=pms_image_proxy&img={{ $v.String "thumb" }}" 
+          <img src="http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=pms_image_proxy&img={{ $img }}" 
                alt="thumb"
+               title = {{ $v.String "platform" }}
                style="width: 50px; margin-right: 1.5rem;"
                class="rounded w-10 h-10 object-cover" />
           <div class="min-width-0 grow">
             <div class="color-highlight" 
               style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
-              title="{{ $v.String "title" }}"
+              title="{{ $v.String "platform" }}"
               >
-              {{ $v.String "title" }}
-            </div>
-            <div class="color-highlight" 
-              style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
-              >
-              {{ $v.Int "year" }}
+              {{ $v.String "platform" }}
             </div>
 
             {{ $seconds := $v.Int "total_duration" }}
             {{ $hours := div $seconds 3600 }}
             {{ $minutes := mod (div $seconds 60) 60 }}
-            {{ $minutes := mod (div $seconds 60) 60 }}
-            {{ $plays := $v.Int "total_plays" }}
-            
             <div class="color-primary">
               <span title = "{{ $v.String "player" }}"> 
                 {{ if gt $hours 0 }}
@@ -182,16 +159,10 @@
               {{ end }}
                </span> • 
               <span>
-                {{ if gt $plays 1 }}
-                  {{ $plays }} Plays
-                {{ else }}
-                  {{ $plays }} Play
-                {{ end }}
+                {{ $v.String "total_plays" }} Plays
               </span> 
             </div>
           </div>
-          <a href="https://app.plex.tv/desktop/#!/server/{{ $serverID }}/details?key=%2Flibrary%2Fmetadata%2F{{ $ratingKey }}" target="_blank" 
-             class="color-primary">▶</a>
         </li>
       {{ end }}
     </ul>

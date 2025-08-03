@@ -234,17 +234,22 @@ pages:
     columns:
       - size: small
         widgets:
+          !include: ./tautulli/now_playing.yml
+          
           !include: ./tautulli/recently_watched.yml
             options: 
               size: "small"
-          
-          !include: ./tautulli/top_movies.yml
-            options: 
+
+          !include: ./tautulli/top_platforms.yml
+            options:
               size: "small"
           
-          !include: ./tautulli/now_playing.yml
       - size: full
         widgets:
+          !include: ./tautulli/top_platforms.yml
+            options:
+              size: "large"
+
           !include: ./tautulli/recently_watched.yml
             options:
               size: "large"
@@ -259,6 +264,10 @@ pages:
 
       - size: small
         widgets:
+          !include: ./tautulli/top_movies.yml
+            options: 
+              size: "small"
+
           !include: ./tautulli/top_shows.yml
             options: 
               size: "small"

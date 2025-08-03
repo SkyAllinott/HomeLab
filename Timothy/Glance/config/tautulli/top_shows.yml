@@ -93,6 +93,8 @@
             {{ $seconds := $v.Int "total_duration" }}
             {{ $hours := div $seconds 3600 }}
             {{ $minutes := mod (div $seconds 60) 60 }}
+            {{ $plays := $v.Int "total_plays" }}
+
             <div class="color-primary">
               <span title = "{{ $v.String "player" }}"> 
                 {{ if gt $hours 0 }}
@@ -103,7 +105,11 @@
               </span>
               <br>
               <span>
-                {{ $v.String "total_plays" }} Plays
+                {{ if gt $plays 1 }}
+                  {{ $plays }} Plays
+                {{ else }}
+                  {{ $plays }} Play
+                {{ end }}
               </span> 
             </div>
           </a>
@@ -163,6 +169,8 @@
             {{ $seconds := $v.Int "total_duration" }}
             {{ $hours := div $seconds 3600 }}
             {{ $minutes := mod (div $seconds 60) 60 }}
+            {{ $plays := $v.Int "total_plays" }}
+
             <div class="color-primary">
               <span title = "{{ $v.String "player" }}"> 
                 {{ if gt $hours 0 }}
@@ -172,7 +180,11 @@
               {{ end }}
                </span> • 
               <span>
-                {{ $v.String "total_plays" }} Plays
+                {{ if gt $plays 1 }}
+                  {{ $plays }} Plays
+                {{ else }}
+                  {{ $plays }} Play
+                {{ end }}
               </span> 
             </div>
           </div>
