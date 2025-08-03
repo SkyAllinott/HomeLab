@@ -1,5 +1,5 @@
 - type: custom-api
-  title: Top Platforms
+  title: Top Users
   cache: 60m
   url: http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?
   allow-potentially-dangerous-html: true
@@ -7,12 +7,12 @@
     time_range: 90
     apikey: ${TAUTULLI_API_KEY}
     cmd: get_home_stats
-    stat_id: top_platforms
+    stat_id: top_users
     stats_type: duration
   template: |
     {{ $isLarge := eq (.Options.StringOr "size" "large") "large" }}
     {{ $serverID := "${SERVER_ID}" }}
-    {{ $uniqueID := "top_platforms" }}
+    {{ $uniqueID := "top_users" }}
 
 
     <!-- Widget version when large-->
@@ -56,8 +56,7 @@
           {{ $isEpisode := eq $type "episode" }}
           {{ $isMovie := eq $type "movie" }}
           {{ $ratingKey := $v.String "rating_key" }}
-          {{ $platforms := $v.String "platform_name" }}
-          {{ $img := printf "interfaces/default/images/platforms/%s.svg" $platforms }}
+          {{ $userimg := $v.String "user_thumb" }}
 
           <div 
             style=
@@ -65,19 +64,19 @@
               text-align: center; 
               text-decoration: none;">
           
-            <div style="max-height: 225px; overflow: hidden; border-radius: 6px;" class = "color-primary">
-              <img src="http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=pms_image_proxy&img={{ $img }}"
+            <div style="max-height: 275px; overflow: hidden; border-radius: 6px;" class = "color-primary">
+              <img src="{{ $userimg }}"
                 alt="thumb"
-                title="{{ $v.String "platform" }}"
-                style="width: 100%; height: auto; object-fit: cover; padding-right: 25px; padding-left: 25px;" />
+                title="{{ $v.String "friendly_name" }}"
+                style="width: 100%; height: auto; object-fit: cover;" />
             </div>
 
           
             <div class="color-highlight" 
               style="margin-top: 0.75rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
-              title="{{ $v.String "platform" }}"
+              title="{{ $v.String "friendly_name" }}"
               >
-              {{ $v.String "platform" }}
+              {{ $v.String "friendly_name" }}
             </div>
             {{ $seconds := $v.Int "total_duration" }}
             {{ $hours := div $seconds 3600 }}
@@ -130,11 +129,10 @@
         {{ $isEpisode := eq $type "episode" }}
         {{ $isMovie := eq $type "movie" }}
         {{ $ratingKey := $v.String "rating_key" }}
-        {{ $platforms := $v.String "platform_name" }}
-        {{ $img := printf "interfaces/default/images/platforms/%s.svg" $platforms }}
+        {{ $userimg := $v.String "user_thumb" }}
 
         <li class="flex items-center gap-2" style="padding: 0.5rem 0; border-bottom: 1px solid var(--color-border);">
-          <img src="http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=pms_image_proxy&img={{ $img }}" 
+          <img src="{{ $userimg }}" 
                alt="thumb"
                title = {{ $v.String "platform" }}
                style="width: 50px; margin-right: 1.5rem;"
@@ -142,9 +140,9 @@
           <div class="min-width-0 grow">
             <div class="color-highlight" 
               style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
-              title="{{ $v.String "platform" }}"
+              title="{{ $v.String "friendly_name" }}"
               >
-              {{ $v.String "platform" }}
+              {{ $v.String "friendly_name" }}
             </div>
 
             {{ $seconds := $v.Int "total_duration" }}

@@ -235,6 +235,10 @@ pages:
       - size: small
         widgets:
           !include: ./tautulli/now_playing.yml
+
+          !include: ./tautulli/top_users.yml
+            options: 
+              size: "small"
           
           !include: ./tautulli/recently_watched.yml
             options: 
@@ -246,6 +250,10 @@ pages:
           
       - size: full
         widgets:
+          !include: ./tautulli/top_users.yml 
+            options:
+              size: "large"
+
           !include: ./tautulli/top_platforms.yml
             options:
               size: "large"
