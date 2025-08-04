@@ -257,6 +257,7 @@ pages:
           !include: ./tautulli/top_platforms.yml
             options:
               size: "large"
+              filter: "brightness(0) saturate(100%) invert(76%) sepia(0%) saturate(696%) hue-rotate(56deg) brightness(98%) contrast(90%)"
 
           !include: ./tautulli/recently_watched.yml
             options:

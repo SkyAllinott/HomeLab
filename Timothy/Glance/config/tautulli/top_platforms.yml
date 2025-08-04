@@ -13,6 +13,8 @@
     {{ $isLarge := eq (.Options.StringOr "size" "large") "large" }}
     {{ $serverID := "${SERVER_ID}" }}
     {{ $uniqueID := "top_platforms" }}
+    {{ $filter := .Options.StringOr "filter" "none" }}
+    
 
 
     <!-- Widget version when large-->
@@ -69,7 +71,8 @@
               <img src="http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=pms_image_proxy&img={{ $img }}"
                 alt="thumb"
                 title="{{ $v.String "platform" }}"
-                style="width: 100%; height: auto; object-fit: cover; padding-right: 25px; padding-left: 25px;" />
+                style="width: 100%; height: auto; object-fit: cover; padding-right: 25px; padding-left: 25px;
+                filter: {{ $filter | safeCSS }};" />
             </div>
 
           
@@ -135,10 +138,10 @@
 
         <li class="flex items-center gap-2" style="padding: 0.5rem 0; border-bottom: 1px solid var(--color-border);">
           <img src="http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=pms_image_proxy&img={{ $img }}" 
-               alt="thumb"
-               title = {{ $v.String "platform" }}
-               style="width: 50px; margin-right: 1.5rem;"
-               class="rounded w-10 h-10 object-cover" />
+            alt="thumb"
+            title = {{ $v.String "platform" }}
+            style="width: 50px; margin-right: 1.5rem; filter: {{ $filter | safeCSS}};"
+            class="rounded w-10 h-10 object-cover" />
           <div class="min-width-0 grow">
             <div class="color-highlight" 
               style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
