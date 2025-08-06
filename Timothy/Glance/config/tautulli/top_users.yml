@@ -1,5 +1,5 @@
 - type: custom-api
-  title: Top Users
+  title: Users
   cache: 60m
   url: http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?
   allow-potentially-dangerous-html: true
@@ -11,157 +11,97 @@
     stats_type: duration
   template: |
     {{ $isLarge := eq (.Options.StringOr "size" "large") "large" }}
-    {{ $serverID := "${SERVER_ID}" }}
     {{ $uniqueID := "top_users" }}
+    {{ $rows := .JSON.Array "response.data.rows" }}
 
-
-    <!-- Widget version when large-->
     {{ if $isLarge }}
-      {{ $rows := .JSON.Array "response.data.rows" }}
- 
-
-      <!-- Left scroll arrow -->
       <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <div id="scrollLeft-{{ $uniqueID }}" title = "Scroll left" onclick='document.getElementById("scrollContainer-{{ $uniqueID }}").scrollBy({ left: -150, behavior: "smooth" })'
-          style="
-            flex: 0 0 2.5rem;
-            height: 100px;  /* match poster height */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--color-surface);
-            cursor: pointer;
-            user-select: none;">
-          <span class = "color-primary" style="font-size: 1.5rem; opacity: 0.7;">
-            ◀
-          </span>
+
+        <!-- Left Arrow -->
+        <div id="scrollLeft-{{ $uniqueID }}" title="Scroll left"
+          onclick='document.getElementById("scrollContainer-{{ $uniqueID }}").scrollBy({ left: -150, behavior: "smooth" })'
+          style="flex: 0 0 2.5rem; height: 100px; display: flex; align-items: center; justify-content: center; background: var(--color-surface); cursor: pointer; user-select: none;">
+          <span class="color-primary" style="font-size: 1.5rem; opacity: 0.7;">◀</span>
         </div>
 
-
-      <!-- Main Content-->
-      <div
-        id="scrollContainer-{{ $uniqueID }}"
-        style="
-          display: flex;
-          overflow-x: auto;
-          gap: 1rem;
-          padding-block: 0.5rem;
-          scroll-behavior: smooth;
-          scrollbar-width: none;
-          -ms-overflow-style: none;">
-
-        {{ range $i, $v := $rows }}
-          {{ $lastWatch := printf "%d" ($v.Int "last_watch") }}
-          {{ $type := $v.String "media_type" }}
-          {{ $isEpisode := eq $type "episode" }}
-          {{ $isMovie := eq $type "movie" }}
-          {{ $ratingKey := $v.String "rating_key" }}
-          {{ $userimg := $v.String "user_thumb" }}
-
-          <div 
-            style=
-              "min-width: 160px; 
-              text-align: center; 
-              text-decoration: none;">
-          
-            <div style="max-height: 275px; overflow: hidden; border-radius: 6px;" class = "color-primary">
-              <img src="{{ $userimg }}"
-                alt="thumb"
-                title="{{ $v.String "friendly_name" }}"
-                style="width: 100%; height: auto; object-fit: cover;" />
-            </div>
-
-          
-            <div class="color-highlight" 
-              style="margin-top: 0.75rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
-              title="{{ $v.String "friendly_name" }}"
-              >
-              {{ $v.String "friendly_name" }}
-            </div>
+        <!-- Scrollable Content -->
+        <div id="scrollContainer-{{ $uniqueID }}"
+          style="display: flex; overflow-x: auto; gap: 1rem; padding-block: 0.5rem; scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none;">
+          {{ range $v := $rows }}
+            {{ $name := $v.String "friendly_name" }}
+            {{ $userimg := $v.String "user_thumb" }}
             {{ $seconds := $v.Int "total_duration" }}
             {{ $hours := div $seconds 3600 }}
             {{ $minutes := mod (div $seconds 60) 60 }}
-            <div class="color-primary">
-              <span title = "{{ $v.String "player" }}"> 
-                {{ if gt $hours 0 }}
-                  {{ printf "%dh %dm" $hours $minutes }}
-                {{ else }}
-                  {{ printf "%dm" $minutes }}
-                {{ end }}
-              </span>
-              <br>
-              <span>
-                {{ $v.String "total_plays" }} Plays
-              </span> 
+
+            <div style="min-width: 160px; text-align: center;">
+              <div style="max-height: 275px; overflow: hidden; border-radius: 6px;" class="color-primary">
+                <img src="{{ $userimg }}"
+                  alt="thumb"
+                  title="{{ $name }}"
+                  style="width: 100%; height: auto; object-fit: cover;" />
+              </div>
+              <div class="color-highlight"
+                style="margin-top: 0.75rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
+                title="{{ $name }}">
+                {{ $name }}
+              </div>
+              <div class="color-primary">
+                <span>
+                  {{ if gt $hours 0 }}
+                    {{ printf "%dh %dm" $hours $minutes }}
+                  {{ else }}
+                    {{ printf "%dm" $minutes }}
+                  {{ end }}
+                </span><br />
+                <span>{{ $v.String "total_plays" }} Plays</span>
+              </div>
             </div>
-          </div>
-        {{ end }}
-      </div>
+          {{ end }}
+        </div>
 
-
-        <!-- Right scroll arrow -->
-        <div
-          id="scrollRight-{{ $uniqueID }}"
-          style="
-            flex: 0 0 2.5rem;
-            height: 100px;  /* adjust to match poster height */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--color-surface);
-            cursor: pointer;
-            user-select: none;
-          "
-          title="Scroll right"
+        <!-- Right Arrow -->
+        <div id="scrollRight-{{ $uniqueID }}" title="Scroll right"
           onclick='document.getElementById("scrollContainer-{{ $uniqueID }}").scrollBy({ left: 150, behavior: "smooth" })'
-        >
-          <span class = "color-primary" style="font-size: 1.5rem; opacity: 0.7;">➤</span>
+          style="flex: 0 0 2.5rem; height: 100px; display: flex; align-items: center; justify-content: center; background: var(--color-surface); cursor: pointer; user-select: none;">
+          <span class="color-primary" style="font-size: 1.5rem; opacity: 0.7;">▶</span>
         </div>
       </div>
 
     {{ else }}
+      <!-- Small Widget -->
+      <ul class="list collapsible-container" data-collapse-after="5">
+        {{ range $v := $rows }}
+          {{ $name := $v.String "friendly_name" }}
+          {{ $userimg := $v.String "user_thumb" }}
+          {{ $seconds := $v.Int "total_duration" }}
+          {{ $hours := div $seconds 3600 }}
+          {{ $minutes := mod (div $seconds 60) 60 }}
 
-    <!-- Widget version when size small-->
-    <ul class="list collapsible-container" data-collapse-after="5">
-      {{ range $i, $v := .JSON.Array "response.data.rows" }}
-        {{ $lastWatch := printf "%d" ($v.Int "last_watch") }}
-        {{ $type := $v.String "media_type" }}
-        {{ $isEpisode := eq $type "episode" }}
-        {{ $isMovie := eq $type "movie" }}
-        {{ $ratingKey := $v.String "rating_key" }}
-        {{ $userimg := $v.String "user_thumb" }}
-
-        <li class="flex items-center gap-2" style="padding: 0.5rem 0; border-bottom: 1px solid var(--color-border);">
-          <img src="{{ $userimg }}" 
-               alt="thumb"
-               title = {{ $v.String "platform" }}
-               style="width: 50px; margin-right: 1.5rem;"
-               class="rounded w-10 h-10 object-cover" />
-          <div class="min-width-0 grow">
-            <div class="color-highlight" 
-              style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
-              title="{{ $v.String "friendly_name" }}"
-              >
-              {{ $v.String "friendly_name" }}
+          <li class="flex items-center gap-2" style="padding: 0.5rem 0; border-bottom: 1px solid var(--color-border);">
+            <img src="{{ $userimg }}"
+              alt="thumb"
+              title="{{ $name }}"
+              style="width: 50px; margin-right: 1.5rem;"
+              class="rounded w-10 h-10 object-cover" />
+            <div class="min-width-0 grow">
+              <div class="color-highlight"
+                style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
+                title="{{ $name }}">
+                {{ $name }}
+              </div>
+              <div class="color-primary">
+                <span>
+                  {{ if gt $hours 0 }}
+                    {{ printf "%dh %dm" $hours $minutes }}
+                  {{ else }}
+                    {{ printf "%dm" $minutes }}
+                  {{ end }}
+                </span> • 
+                <span>{{ $v.String "total_plays" }} Plays</span>
+              </div>
             </div>
-
-            {{ $seconds := $v.Int "total_duration" }}
-            {{ $hours := div $seconds 3600 }}
-            {{ $minutes := mod (div $seconds 60) 60 }}
-            <div class="color-primary">
-              <span title = "{{ $v.String "player" }}"> 
-                {{ if gt $hours 0 }}
-                {{ printf "%dh %dm" $hours $minutes }}
-              {{ else }}
-                {{ printf "%dm" $minutes }}
-              {{ end }}
-               </span> • 
-              <span>
-                {{ $v.String "total_plays" }} Plays
-              </span> 
-            </div>
-          </div>
-        </li>
-      {{ end }}
-    </ul>
+          </li>
+        {{ end }}
+      </ul>
     {{ end }}

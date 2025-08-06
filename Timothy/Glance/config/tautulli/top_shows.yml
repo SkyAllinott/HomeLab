@@ -1,5 +1,5 @@
 - type: custom-api
-  title: Top TV
+  title: TV
   cache: 60m
   url: http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?
   parameters:
@@ -12,185 +12,121 @@
     {{ $isLarge := eq (.Options.StringOr "size" "large") "large" }}
     {{ $serverID := "${SERVER_ID}" }}
     {{ $uniqueID := "top_shows" }}
+    {{ $rows := .JSON.Array "response.data.rows" }}
 
-
-    <!-- Widget version when large-->
     {{ if $isLarge }}
-      {{ $rows := .JSON.Array "response.data.rows" }}
- 
-
-      <!-- Left scroll arrow -->
+      <!-- Large View -->
       <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <div id="scrollLeft-{{ $uniqueID }}" title = "Scroll left" onclick='document.getElementById("scrollContainer-{{ $uniqueID }}").scrollBy({ left: -150, behavior: "smooth" })'
-          style="
-            flex: 0 0 2.5rem;
-            height: 100px;  /* match poster height */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--color-surface);
-            cursor: pointer;
-            user-select: none;">
-          <span class = "color-primary" style="font-size: 1.5rem; opacity: 0.7;">
-            ◀
-          </span>
+        <!-- Left Arrow -->
+        <div id="scrollLeft-{{ $uniqueID }}" onclick='document.getElementById("scrollContainer-{{ $uniqueID }}").scrollBy({ left: -150, behavior: "smooth" })'
+          style="flex: 0 0 2.5rem; height: 100px; display: flex; align-items: center; justify-content: center; background: var(--color-surface); cursor: pointer;">
+          <span class="color-primary" style="font-size: 1.5rem; opacity: 0.7;">◀</span>
         </div>
 
-
-      <!-- Main Content-->
-      <div
-        id="scrollContainer-{{ $uniqueID }}"
-        style="
-          display: flex;
-          overflow-x: auto;
-          gap: 1rem;
-          padding-block: 0.5rem;
-          scroll-behavior: smooth;
-          scrollbar-width: none;
-          -ms-overflow-style: none;">
-
-        {{ range $i, $v := $rows }}
-          {{ $lastWatch := printf "%d" ($v.Int "last_watch") }}
-          {{ $type := $v.String "media_type" }}
-          {{ $isEpisode := eq $type "episode" }}
-          {{ $isMovie := eq $type "movie" }}
-          {{ $ratingKey := $v.String "rating_key" }}
-
-          <a 
-            href="https://app.plex.tv/desktop/#!/server/${SERVER_ID}/details?key=%2Flibrary%2Fmetadata%2F{{ $ratingKey }}"
-            target="_blank"
-            style=
-              "min-width: 160px; 
-              text-align: center; 
-              text-decoration: none;">
-            
-            {{ $titleHover := "" }}
-            {{ if $isEpisode }}
-              {{ $titleHover = $v.String "grandchild_title" }}
-            {{ else if $isMovie }}
-              {{ $titleHover = $v.String "title" }}
-            {{ end }}
-          
-            <div style="max-height: 250px; overflow: hidden; border-radius: 6px;">
-              <img src="http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=pms_image_proxy&img={{ $v.String "thumb" }}"
-                alt="thumb"
-                title="{{ $titleHover }}"
-                style="width: 100%; height: auto; object-fit: cover;" />
-            </div>
-
-          
-            <div class="color-highlight" 
-              style="margin-top: 0.25rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
-              title="{{ $v.String "title" }}"
-              >
-              {{ $v.String "title" }}
-            </div>
-            <div class="color-highlight" 
-              style="margin-top: 0.25rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
-              >
-              {{ $v.Int "year" }}
-            </div>
+        <!-- Scrollable Items -->
+        <div id="scrollContainer-{{ $uniqueID }}"
+          style="display: flex; overflow-x: auto; gap: 1rem; padding-block: 0.5rem; scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none;">
+          {{ range $i, $v := $rows }}
+            {{ $ratingKey := $v.String "rating_key" }}
             {{ $seconds := $v.Int "total_duration" }}
             {{ $hours := div $seconds 3600 }}
             {{ $minutes := mod (div $seconds 60) 60 }}
             {{ $plays := $v.Int "total_plays" }}
+            {{ $thumb := $v.String "thumb" }}
+            {{ $title := $v.String "title" }}
+            {{ $year := $v.Int "year" }}
+            {{ $hover := $v.String "grandchild_title" }}
 
-            <div class="color-primary">
-              <span title = "{{ $v.String "player" }}"> 
-                {{ if gt $hours 0 }}
-                  {{ printf "%dh %dm" $hours $minutes }}
-                {{ else }}
-                  {{ printf "%dm" $minutes }}
-                {{ end }}
-              </span>
-              <br>
-              <span>
-                {{ if gt $plays 1 }}
-                  {{ $plays }} Plays
-                {{ else }}
-                  {{ $plays }} Play
-                {{ end }}
-              </span> 
-            </div>
-          </a>
-        {{ end }}
-      </div>
+            <a href="https://app.plex.tv/desktop/#!/server/{{ $serverID }}/details?key=%2Flibrary%2Fmetadata%2F{{ $ratingKey }}" target="_blank"
+              style="min-width: 160px; text-align: center; text-decoration: none;">
+              <div style="max-height: 250px; overflow: hidden; border-radius: 6px;">
+                <img src="http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=pms_image_proxy&img={{ $thumb }}"
+                  alt="thumb" title="{{ $hover }}" style="width: 100%; height: auto; object-fit: cover;" />
+              </div>
+              <div class="color-highlight"
+                style="margin-top: 0.25rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
+                title="{{ $title }}">
+                {{ $title }}
+              </div>
+              <div class="color-highlight"
+                style="margin-top: 0.25rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                {{ $year }}
+              </div>
+              <div class="color-primary">
+                <span title="{{ $v.String "player" }}">
+                  {{ if gt $hours 0 }}
+                    {{ printf "%dh %dm" $hours $minutes }}
+                  {{ else }}
+                    {{ printf "%dm" $minutes }}
+                  {{ end }}
+                </span>
+                <br>
+                <span>
+                  {{ if gt $plays 1 }}
+                    {{ $plays }} Plays
+                  {{ else }}
+                    {{ $plays }} Play
+                  {{ end }}
+                </span>
+              </div>
+            </a>
+          {{ end }}
+        </div>
 
-
-        <!-- Right scroll arrow -->
-        <div
-          id="scrollRight-{{ $uniqueID }}"
-          style="
-            flex: 0 0 2.5rem;
-            height: 100px;  /* adjust to match poster height */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--color-surface);
-            cursor: pointer;
-            user-select: none;
-          "
-          title="Scroll right"
+        <!-- Right Arrow -->
+        <div id="scrollRight-{{ $uniqueID }}"
           onclick='document.getElementById("scrollContainer-{{ $uniqueID }}").scrollBy({ left: 150, behavior: "smooth" })'
-        >
-          <span class = "color-primary" style="font-size: 1.5rem; opacity: 0.7;">➤</span>
+          style="flex: 0 0 2.5rem; height: 100px; display: flex; align-items: center; justify-content: center; background: var(--color-surface); cursor: pointer;">
+          <span class="color-primary" style="font-size: 1.5rem; opacity: 0.7;">▶</span>
         </div>
       </div>
 
     {{ else }}
+      <!-- Small View -->
+      <ul class="list collapsible-container" data-collapse-after="5">
+        {{ range $i, $v := $rows }}
+          {{ $ratingKey := $v.String "rating_key" }}
+          {{ $seconds := $v.Int "total_duration" }}
+          {{ $hours := div $seconds 3600 }}
+          {{ $minutes := mod (div $seconds 60) 60 }}
+          {{ $plays := $v.Int "total_plays" }}
+          {{ $thumb := $v.String "thumb" }}
+          {{ $title := $v.String "title" }}
+          {{ $year := $v.Int "year" }}
 
-    <!-- Widget version when size small-->
-    <ul class="list collapsible-container" data-collapse-after="5">
-      {{ range $i, $v := .JSON.Array "response.data.rows" }}
-        {{ $lastWatch := printf "%d" ($v.Int "last_watch") }}
-        {{ $type := $v.String "media_type" }}
-        {{ $isEpisode := eq $type "episode" }}
-        {{ $isMovie := eq $type "movie" }}
-        {{ $ratingKey := $v.String "rating_key" }}
-
-        <li class="flex items-center gap-2" style="padding: 0.5rem 0; border-bottom: 1px solid var(--color-border);">
-          <img src="http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=pms_image_proxy&img={{ $v.String "thumb" }}" 
-               alt="thumb"
-               style="width: 50px; margin-right: 1.5rem;"
-               class="rounded w-10 h-10 object-cover" />
-          <div class="min-width-0 grow">
-            <div class="color-highlight" 
-              style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
-              title="{{ $v.String "title" }}"
-              >
-              {{ $v.String "title" }}
+          <li class="flex items-center gap-2" style="padding: 0.5rem 0; border-bottom: 1px solid var(--color-border);">
+            <img src="http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=pms_image_proxy&img={{ $thumb }}"
+              alt="thumb" style="width: 50px; margin-right: 1.5rem;" class="rounded w-10 h-10 object-cover" />
+            <div class="min-width-0 grow">
+              <div class="color-highlight"
+                style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
+                title="{{ $title }}">
+                {{ $title }}
+              </div>
+              <div class="color-highlight"
+                style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                {{ $year }}
+              </div>
+              <div class="color-primary">
+                <span title="{{ $v.String "player" }}">
+                  {{ if gt $hours 0 }}
+                    {{ printf "%dh %dm" $hours $minutes }}
+                  {{ else }}
+                    {{ printf "%dm" $minutes }}
+                  {{ end }}
+                </span> • 
+                <span>
+                  {{ if gt $plays 1 }}
+                    {{ $plays }} Plays
+                  {{ else }}
+                    {{ $plays }} Play
+                  {{ end }}
+                </span>
+              </div>
             </div>
-            <div class="color-highlight" 
-              style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" 
-              >
-              {{ $v.Int "year" }}
-            </div>
-
-            {{ $seconds := $v.Int "total_duration" }}
-            {{ $hours := div $seconds 3600 }}
-            {{ $minutes := mod (div $seconds 60) 60 }}
-            {{ $plays := $v.Int "total_plays" }}
-
-            <div class="color-primary">
-              <span title = "{{ $v.String "player" }}"> 
-                {{ if gt $hours 0 }}
-                {{ printf "%dh %dm" $hours $minutes }}
-              {{ else }}
-                {{ printf "%dm" $minutes }}
-              {{ end }}
-               </span> • 
-              <span>
-                {{ if gt $plays 1 }}
-                  {{ $plays }} Plays
-                {{ else }}
-                  {{ $plays }} Play
-                {{ end }}
-              </span> 
-            </div>
-          </div>
-          <a href="https://app.plex.tv/desktop/#!/server/{{ $serverID }}/details?key=%2Flibrary%2Fmetadata%2F{{ $ratingKey }}" target="_blank" 
-             class="color-primary">▶</a>
-        </li>
-      {{ end }}
-    </ul>
+            <a href="https://app.plex.tv/desktop/#!/server/{{ $serverID }}/details?key=%2Flibrary%2Fmetadata%2F{{ $ratingKey }}" target="_blank"
+               class="color-primary">▶</a>
+          </li>
+        {{ end }}
+      </ul>
     {{ end }}
