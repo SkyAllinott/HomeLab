@@ -6,9 +6,10 @@ pages:
         widgets:
           !include: ./f1_extensions/f1_next_race.yml
 
-          !include: ./f1_extensions/f1_constructors_championship.yml
-
-          !include: ./f1_extensions/f1_drivers_championship.yml
+          - type: group
+            widgets:
+              !include: ./f1_extensions/f1_drivers_championship.yml
+              !include: ./f1_extensions/f1_constructors_championship.yml
 
           - type: group
             widgets:
@@ -21,10 +22,12 @@ pages:
       - size: full
         widgets:
           - type: search
+            title: " "
             search-engine: google
             autofocus: true
 
           - type: bookmarks
+            title: " "
             groups:
               - title: General
                 links:
@@ -56,9 +59,61 @@ pages:
                   - title: Twitter
                     url: https://x.com/home
                     same-tab: true
+          - type: split-column
+            max-columns: 4
+            widgets:
+              !include: ./tautulli/recently_watched.yml
+                options:
+                  size: "small"
 
+              !include: ./tautulli/recently_added.yml
+                options:
+                  size: "small"
+              - type: group
+                widgets:
+                  !include: ./tautulli/top_shows.yml
+                    options: 
+                      size: "small"
+                  !include: ./tautulli/top_movies.yml
+                    options: 
+                      size: "small"
+                  !include: ./tautulli/top_users.yml
+                    options:
+                      size: "small"
+                  !include: ./tautulli/top_platforms.yml
+                    options:
+                      size: "small"
+                      filter: "brightness(0) saturate(100%) invert(75%) sepia(73%) saturate(5%) hue-rotate(161deg) brightness(93%) contrast(96%)"
+
+
+          - type: group
+            widgets:
+              - type: reddit
+                cache: 2h
+                limit: 3
+                subreddit: edmonton
+                show-thumbnails: true
+              - type: reddit
+                cache: 2h
+                limit: 3
+                subreddit: alberta
+                show-thumbnails: true
+              - type: reddit
+                cache: 2h
+                limit: 3
+                subreddit: homelab
+                show-thumbnails: true
+              - type: reddit
+                cache: 2h
+                limit: 3
+                subreddit: movies
+                show-thumbnails: true
+
+      - size: small
+        widgets:
+          !include: ./tautulli/now_playing.yml
           - type: custom-api
-            title: Uptime Kuma
+            title: " "
             url: http://uptime.winston-server.com/api/status-page/services
             subrequests:
               heartbeats:
@@ -109,64 +164,16 @@ pages:
               </ul>
               {{ end }}
 
-          - type: videos
-            cache: 1h
-            style: grid-cards
-            collapse-after-rows: 1
-            limit: 5
-            channels:
-             - UCXuqSBlHAE6Xw-yeJA0Tunw # Linus Tech Tips
-             - UCvSuRqKTSHw4c3LCHeuCiiw # Bearded Mechanic
-             - UCa3t89CuxPJFX2vvgagRUYw # Sam Reid
-             - UC4PooiX37Pld1T8J5SYT-SQ # GMM
-
-
-          - type: group
-            widgets:
-              - type: reddit
-                cache: 2h
-                limit: 3
-                subreddit: edmonton
-                show-thumbnails: true
-              - type: reddit
-                cache: 2h
-                limit: 3
-                subreddit: alberta
-                show-thumbnails: true
-              - type: reddit
-                cache: 2h
-                limit: 3
-                subreddit: homelab
-                show-thumbnails: true
-              - type: reddit
-                cache: 2h
-                limit: 3
-                subreddit: movies
-                show-thumbnails: true
-
-      - size: small
-        widgets:
-          - type: clock
-            hour-format: 12h
-            timezones:
-             - timezone: Europe/London
-               label: England
-             - timezone: Europe/Stockholm
-               label: Sweden
-             - timezone: US/Central
-               label: Dallas
-
           - type: weather
             location: Edmonton, Canada
             units: metric # alternatively "imperial"
             hour-format: 12h # alternatively "24h"
-            # Optionally hide the location from being displayed in the widget
-            # hide-location: true
-
-          !include: ./ghostfolio/ghostfolio.yml
+            title: " "
+            hide-location: true
 
           - type: markets
             cache: 5m
+            title: " "
             markets:
               - symbol: VEQT.TO
                 name: Vanguard Total World Equity
@@ -177,6 +184,7 @@ pages:
 
           - type: twitch-channels
             cache: 5m
+            title: " "
             collapse-after: 3
             channels:
               - Northernlion
@@ -236,6 +244,10 @@ pages:
         widgets:
           !include: ./tautulli/now_playing.yml
 
+          !include: ./tautulli/recently_added.yml
+            options:
+              size: small
+
           !include: ./tautulli/top_users.yml
             options: 
               size: "small"
@@ -247,9 +259,14 @@ pages:
           !include: ./tautulli/top_platforms.yml
             options:
               size: "small"
+              filter: "brightness(0) saturate(100%) invert(75%) sepia(73%) saturate(5%) hue-rotate(161deg) brightness(93%) contrast(96%)"
           
       - size: full
         widgets:
+          !include: ./tautulli/recently_added.yml
+            options:
+              size: "large"
+
           !include: ./tautulli/top_users.yml 
             options:
               size: "large"
@@ -257,7 +274,7 @@ pages:
           !include: ./tautulli/top_platforms.yml
             options:
               size: "large"
-              filter: "brightness(0) saturate(100%) invert(76%) sepia(0%) saturate(696%) hue-rotate(56deg) brightness(98%) contrast(90%)"
+              filter: "brightness(0) saturate(100%) invert(75%) sepia(73%) saturate(5%) hue-rotate(161deg) brightness(93%) contrast(96%)"
 
           !include: ./tautulli/recently_watched.yml
             options:
