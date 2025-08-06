@@ -14,6 +14,7 @@
     {{ $serverID := "${SERVER_ID}" }}
     {{ $uniqueID := "top_platforms" }}
     {{ $filter := .Options.StringOr "filter" "none" }}
+    {{ $collapse := .Options.IntOr "collapse" 5 }}
     {{ $rows := .JSON.Array "response.data.rows" }}
 
     {{ if $isLarge }}
@@ -74,7 +75,7 @@
       </div>
     {{ else }}
       <!-- Small Widget -->
-      <ul class="list collapsible-container" data-collapse-after="5">
+      <ul class="list collapsible-container" data-collapse-after="{{ $collapse }}">
         {{ range $v := $rows }}
           {{ $platform := $v.String "platform" }}
           {{ $platformName := $v.String "platform_name" }}

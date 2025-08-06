@@ -4,11 +4,12 @@
   url: http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=get_activity
   template: |
     {{ $sessions := .JSON.Array "response.data.sessions" }}
+    {{ $collapse := .Options.IntOr "collapse" 5 }}
 
     {{ if eq (len $sessions) 0 }}
       <div class="color-dim">No one is watching anything right now.</div>
     {{ else }}
-      <ul class="list collapsible-container">
+      <ul class="list collapsible-container" data-collapse-after="{{ $collapse }}">
         {{ range $session := $sessions }}
           {{ $type := $session.String "media_type" }}
           {{ $isEpisode := eq $type "episode" }}

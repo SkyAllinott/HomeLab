@@ -13,6 +13,7 @@
     {{ $isLarge := eq (.Options.StringOr "size" "large") "large" }}
     {{ $serverID := "${SERVER_ID}" }}
     {{ $uniqueID := "top_movies" }}
+    {{ $collapse := .Options.IntOr "collapse" 5 }}
     {{ $rows := .JSON.Array "response.data.rows" }}
 
     {{ if $isLarge }}
@@ -81,7 +82,7 @@
 
     {{ else }}
       <!-- Small widget version -->
-      <ul class="list collapsible-container" data-collapse-after="5">
+      <ul class="list collapsible-container" data-collapse-after="{{ $collapse }}">
         {{ range $v := $rows }}
           {{ $title := $v.String "title" }}
           {{ $thumb := $v.String "thumb" }}

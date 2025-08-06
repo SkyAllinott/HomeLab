@@ -12,6 +12,7 @@
   template: |
     {{ $isLarge := eq (.Options.StringOr "size" "large") "large" }}
     {{ $uniqueID := "top_users" }}
+    {{ $collapse := .Options.IntOr "collapse" 5 }}
     {{ $rows := .JSON.Array "response.data.rows" }}
 
     {{ if $isLarge }}
@@ -70,7 +71,7 @@
 
     {{ else }}
       <!-- Small Widget -->
-      <ul class="list collapsible-container" data-collapse-after="5">
+      <ul class="list collapsible-container" data-collapse-after="{{ $collapse }}">
         {{ range $v := $rows }}
           {{ $name := $v.String "friendly_name" }}
           {{ $userimg := $v.String "user_thumb" }}

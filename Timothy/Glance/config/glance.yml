@@ -65,25 +65,31 @@ pages:
               !include: ./tautulli/recently_watched.yml
                 options:
                   size: "small"
+                  collapse: 5
 
               !include: ./tautulli/recently_added.yml
                 options:
                   size: "small"
+                  collapse: 5
               - type: group
                 widgets:
                   !include: ./tautulli/top_shows.yml
                     options: 
                       size: "small"
+                      collapse: 5
                   !include: ./tautulli/top_movies.yml
                     options: 
                       size: "small"
+                      collapse: 5
                   !include: ./tautulli/top_users.yml
                     options:
                       size: "small"
+                      collapse: 6
                   !include: ./tautulli/top_platforms.yml
                     options:
                       size: "small"
                       filter: "brightness(0) saturate(100%) invert(75%) sepia(73%) saturate(5%) hue-rotate(161deg) brightness(93%) contrast(96%)"
+                      collapse: 6
 
 
           - type: group

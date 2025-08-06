@@ -6,6 +6,7 @@
     {{ $isLarge := eq (.Options.StringOr "size" "large") "large" }}
     {{ $serverID := "${SERVER_ID}" }}
     {{ $uniqueID := "recently_added" }}
+    {{ $collapse := .Options.IntOr "collapse" 5 }}
     {{ $rows := .JSON.Array "response.data.recently_added" }}
 
     {{ if $isLarge }}
@@ -80,7 +81,7 @@
       </div>
     {{ else }}
       <!-- Small View -->
-      <ul class="list collapsible-container" data-collapse-after="5">
+      <ul class="list collapsible-container" data-collapse-after="{{ $collapse }}">
         {{ range $i, $v := $rows }}
           {{ $type := $v.String "media_type" }}
           {{ $isEpisode := eq $type "episode" }}
