@@ -1,5 +1,5 @@
 - type: custom-api
-  title: Drivers Standings
+  title: Drivers
   cache: 5m
   url: http://192.168.0.159:4463/f1/drivers_standings/
   template: |
