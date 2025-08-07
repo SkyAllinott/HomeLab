@@ -1,0 +1,16 @@
+- type: custom-api
+  title: Drive Health
+  url: http://192.168.0.92:8020/api/summary
+  cache: 1d
+  method: GET
+  template: |
+    {{- range $wwn, $rec := (.JSON.Get "data.summary").Map }}
+    <div style="display:flex; align-items:center; margin-bottom:6px;">
+      <div style="flex-grow:1; font-weight:bold;">{{ $wwn }}</div>
+        {{ if ($rec.Get "device.device_status").Num | eq 0.0 }}
+        <div style="color:green; font-size:18px;">✔️</div>
+      {{- else }}
+        <div style="color:red; font-size:18px;">❌</div>
+      {{- end }}
+    </div>
+    {{- end }}

@@ -117,6 +117,7 @@ pages:
 
       - size: small
         widgets:
+          !include: ./scrutiny/scrutiny.yml
           !include: ./tautulli/now_playing.yml
           - type: custom-api
             title: " "
