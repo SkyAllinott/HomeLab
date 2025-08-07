@@ -43,7 +43,7 @@
                   style="width: 100%; height: auto; object-fit: cover;" />
               </div>
               <div class="color-highlight"
-                style="margin-top: 0.75rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
+                style="margin-top: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
                 title="{{ $name }}">
                 {{ $name }}
               </div>

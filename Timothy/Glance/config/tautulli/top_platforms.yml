@@ -46,7 +46,7 @@
                   style="width: 100%; height: auto; object-fit: cover; padding: 0 25px; filter: {{ $filter | safeCSS }};" />
               </div>
               <div class="color-highlight"
-                style="margin-top: 0.75rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
+                style="margin-top: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
                 title="{{ $platform }}">
                 {{ $platform }}
               </div>

@@ -44,8 +44,8 @@
               {{ $sub = printf "%d" ($v.Int "year") }}
             {{ else if $isSeason }}
               {{ $img = $v.String "parent_thumb" }}
-              {{ $title = $v.String "grandparent_title" }}
-              {{ $sub = $v.String "parent_title" }}
+              {{ $title = $v.String "parent_title" }}
+              {{ $sub = $v.String "title" }}
             {{ else if $isShow }}
               {{ $img = $v.String "thumb" }}
               {{ $title = $v.String "title" }}
@@ -59,10 +59,10 @@
                   alt="thumb" title="{{ $title }}"
                   style="width: 100%; height: auto; object-fit: cover;" />
               </div>
-              <div class="color-highlight" style="margin-top: 0.25rem; height: 2em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" title="{{ $title }}">
+              <div class="color-highlight" style="margin-top: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" title="{{ $title }}">
                 {{ $title }}
               </div>
-              <div class="color-highlight" style="margin-top: 0.25rem; height: 2em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+              <div class="color-highlight" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                 {{ $sub }}
               </div>
               <div class="color-primary" style="font-size: 0.9em;">
@@ -105,8 +105,8 @@
             {{ $sub = printf "%d" ($v.Int "year") }}
           {{ else if $isSeason }}
             {{ $img = $v.String "parent_thumb" }}
-            {{ $title = $v.String "grandparent_title" }}
-            {{ $sub = $v.String "parent_title" }}
+            {{ $title = $v.String "parent_title" }}
+            {{ $sub = $v.String "title" }}
           {{ else if $isShow }}
             {{ $img = $v.String "thumb" }}
             {{ $title = $v.String "title" }}

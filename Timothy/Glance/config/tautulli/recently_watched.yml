@@ -47,20 +47,20 @@
               <!-- Media info -->
               {{ if $isEpisode }}
                 <div class="color-highlight" title="{{ $v.String "grandparent_title" }}"
-                  style="margin-top: 0.25rem; height: 2em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                  style="margin-top: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                   {{ $v.String "grandparent_title" }}
                 </div>
                 <div class="color-highlight" title="{{ $titleHover }}"
-                  style="margin-top: 0.1rem; height: 2em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                  style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                   S{{ $v.Int "parent_media_index" }}·E{{ $v.Int "media_index" }}
                 </div>
               {{ else }}
                 <div class="color-highlight" title="{{ $v.String "title" }}"
-                  style="margin-top: 0.25rem; height: 2em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                  style="margin-top: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                   {{ $v.String "title" }}
                 </div>
                 <div class="color-highlight"
-                  style="margin-top: 0.25rem; height: 2em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                  style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                   {{ $v.Int "year" }}
                 </div>
               {{ end }}

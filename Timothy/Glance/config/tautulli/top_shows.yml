@@ -45,12 +45,12 @@
                   alt="thumb" title="{{ $hover }}" style="width: 100%; height: auto; object-fit: cover;" />
               </div>
               <div class="color-highlight"
-                style="margin-top: 0.25rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
+                style="margin-top: 1rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
                 title="{{ $title }}">
                 {{ $title }}
               </div>
               <div class="color-highlight"
-                style="margin-top: 0.25rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                 {{ $year }}
               </div>
               <div class="color-primary">
