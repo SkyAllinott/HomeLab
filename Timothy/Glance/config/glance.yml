@@ -30,6 +30,7 @@ pages:
             title: " "
             groups:
               - title: General
+                color: 10 70 50
                 links:
                   - title: Github
                     url: https://github.com/
@@ -40,9 +41,21 @@ pages:
                   - title: Movie Rankings
                     url: https://docs.google.com/spreadsheets/d/1d-YPy20QbiuzhKRq7IFGd5rfE0Iq9imoFgyNbzKo1uc/edit?usp=sharing
                     same-tab: true
-                  - title: Drive Health
-                    url: http://192.168.0.92:8020/web/dashboard
+              - title: Server
+                color: 200 50 50
+                links:
+                  - title: Transmission
+                    url: http://transmission.winston-server.com
                     same-tab: true
+                  - title: Sonarr
+                    url: http://sonarr.winston-server.com
+                    same-tab: true
+                  - title: Radarr
+                    url: http://radarr.winston-server.com
+                    same-tab: true
+                  - title: Pihole
+                    url: http://pihole.winston-server.com
+                    same-tab: true 
               - title: Entertainment
                 links:
                   - title: Plex
@@ -51,8 +64,6 @@ pages:
                   - title: YouTube
                     url: https://www.youtube.com/
                     same-tab: true
-              - title: Social
-                links:
                   - title: Reddit
                     url: https://old.reddit.com/
                     same-tab: true
@@ -84,41 +95,54 @@ pages:
                   !include: ./tautulli/top_users.yml
                     options:
                       size: "small"
-                      collapse: 6
+                      collapse: 7
                   !include: ./tautulli/top_platforms.yml
                     options:
                       size: "small"
                       filter: "brightness(0) saturate(100%) invert(75%) sepia(73%) saturate(5%) hue-rotate(161deg) brightness(93%) contrast(96%)"
-                      collapse: 6
-
-
-          - type: group
+                      collapse: 7 
+          - type: split-column
+            max-columns: 2
             widgets:
-              - type: reddit
-                cache: 2h
-                limit: 3
-                subreddit: edmonton
-                show-thumbnails: true
-              - type: reddit
-                cache: 2h
-                limit: 3
-                subreddit: alberta
-                show-thumbnails: true
-              - type: reddit
-                cache: 2h
-                limit: 3
-                subreddit: homelab
-                show-thumbnails: true
-              - type: reddit
-                cache: 2h
-                limit: 3
-                subreddit: movies
-                show-thumbnails: true
+              - type: group
+                widgets:
+                  - type: reddit
+                    cache: 2h
+                    limit: 3
+                    subreddit: edmonton
+                    show-thumbnails: true
+                  - type: reddit
+                    cache: 2h
+                    limit: 3
+                    subreddit: alberta
+                    show-thumbnails: true
+                  - type: reddit
+                    cache: 2h
+                    limit: 3
+                    subreddit: homelab
+                    show-thumbnails: true
+                  - type: reddit
+                    cache: 2h
+                    limit: 3
+                    subreddit: movies
+                    show-thumbnails: true
+              - type: twitch-channels
+                cache: 5m
+                title: "Twitch"
+                collapse-after: 3
+                channels:
+                  - Northernlion
+                  - shxtou
+                  - sleepy
+                  - birlap
+                  - Squeex
+                  - p4perback
+                  - WhatAboutAndy
 
       - size: small
         widgets:
-          !include: ./scrutiny/scrutiny.yml
           !include: ./tautulli/now_playing.yml
+          !include: ./scrutiny/scrutiny.yml
           - type: custom-api
             title: " "
             url: http://uptime.winston-server.com/api/status-page/services
@@ -171,36 +195,13 @@ pages:
               </ul>
               {{ end }}
 
-          - type: weather
-            location: Edmonton, Canada
-            units: metric # alternatively "imperial"
-            hour-format: 12h # alternatively "24h"
-            title: " "
-            hide-location: true
-
           - type: markets
             cache: 5m
             title: " "
             markets:
               - symbol: VEQT.TO
-                name: Vanguard Total World Equity
               - symbol: VFV.TO
-                name: Vanguard S&P 500
               - symbol: TEC.TO
-                name: TD Technology ETF
-
-          - type: twitch-channels
-            cache: 5m
-            title: " "
-            collapse-after: 3
-            channels:
-              - Northernlion
-              - shxtou
-              - sleepy
-              - birlap
-              - Squeex
-              - p4perback
-              - WhatAboutAndy
 
 
 
