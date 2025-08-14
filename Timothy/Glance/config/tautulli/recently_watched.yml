@@ -115,7 +115,7 @@
                   style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                   {{ $v.String "title" }}
                 </div>
-                <div class="color-highlight"
+                <div class="color-highlight" 
                   style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                   {{ $v.Int "year" }}
                 </div>

@@ -1,7 +1,7 @@
 - type: custom-api
-  title: " "
+  title: "Drive Health"
   url: http://${SCRUTINY_URL}/api/summary
-  cache: 1d
+  cache: 1h
   method: GET
   options:
     filter_archived: true 
@@ -14,14 +14,11 @@
         {{- $total = add $total 1 }}
       {{- end }}
     {{- end }}
-
     {{- $count:= 0}}
-
     {{- range $wwn, $rec := (.JSON.Get "data.summary").Map }}
       {{- $archived := $rec.Get "device.archived" }}
       {{- if or (not $filterArchived) (and $archived.Exists (not $archived.Bool)) }}
         {{- $count = add $count 1 }}
-
         {{- $device := $rec.Get "device.device_name" }}
         {{- $model := $rec.Get "device.model_name" }}
         {{- $hoursFloat := ($rec.Get "smart.power_on_hours").Num }}
@@ -31,12 +28,10 @@
         {{- $capacity_tb := div $capacity 1000000000000 }}
         {{- $capacity_print := printf "%.0f" $capacity_tb }}
         {{- $status := ($rec.Get "device.device_status").Num }}
-
         {{- $tempHistory := $rec.Get "temp_history" }}
         {{- $lastIndex := sub (len $tempHistory.Array) 1 }}
         {{- $latestTemp := index $tempHistory.Array $lastIndex }}
         {{- $latestTempValue := $latestTemp.Get "temp" }}
-
         <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
           <a href="http://${SCRUTINY_URL}/web/device/{{ $wwn }}" target="_blank"> 
             <div>
@@ -51,14 +46,13 @@
               </div>
             </div>
           </a>
-
           <div style="display: flex; align-items: center; gap: 6px;">
             <a href="http://${SCRUTINY_URL}/web/device/{{ $wwn }}" target="_blank"> 
               {{- if eq $status 0.0 }}
-                <span title = "Passed Health Checks" style="color: green; font-size: 18px; cursor: pointer;">●</span>
+                <span title = "Passed Health Checks" style="font-size: 18px; cursor: pointer;" class = "color-positive">●</span>
                 <span style="color: green;"></span>
               {{- else }}
-                <span title = "Failed Health Checks" style="color: red; font-size: 18px; cursor: pointer;">●</span>
+                <span title = "Failed Health Checks" style="font-size: 18px; cursor: pointer;" class="color-negative">●</span>
                 <span style="color: red;"></span>
               {{- end }}
             </a>

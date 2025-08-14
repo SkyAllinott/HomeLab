@@ -8,15 +8,15 @@
 
     {{ if eq (len $sessions) 0 }}
       <div class="color-dim">No one is watching anything right now.</div>
-    {{ else }}
+    {{ else }} 
       <ul class="list collapsible-container" data-collapse-after="{{ $collapse }}">
         {{ range $session := $sessions }}
           {{ $type := $session.String "media_type" }}
-          {{ $isEpisode := eq $type "episode" }}
+          {{ $isEpisode := eq $type "episode" }}  
           {{ $isMovie := eq $type "movie" }}
           {{ $thumb := "" }}
           {{ $title := "" }}
-          {{ $subtitle := "" }}
+          {{ $subtitle := "" }} 
 
           {{ if $isEpisode }}
             {{ $title = $session.String "grandparent_title" }}
@@ -40,10 +40,10 @@
               <img
                 src="http://${TAUTULLI_IP}:${TAUTULLI_PORT}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=pms_image_proxy&img={{ $thumb }}"
                 alt="thumb"
-                style="width: 50px; margin-right: 1.5rem;"
-                class="rounded object-cover"
-              />
-            </a>
+                style="width: 50px; margin-right: 1.5rem; min-width: 50px;"
+                class="rounded object-cover" 
+              /> 
+            </a> 
 
             <div class="min-width-0 grow">
               <div class="color-highlight"
