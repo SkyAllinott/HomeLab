@@ -46,7 +46,7 @@ pages:
                 color: 200 50 50
                 links:
                   - title: Transmission
-                    url: http://transmission.winston-server.com
+                    url: http://download.winston-server.com
                     same-tab: true
                   - title: Sonarr
                     url: http://sonarr.winston-server.com
