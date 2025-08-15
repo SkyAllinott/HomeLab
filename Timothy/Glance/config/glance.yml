@@ -1,6 +1,7 @@
 pages:
   - name: Home
     width: wide
+    desktop-navigation-width: wide
     columns:
       - size: small
         widgets:
