@@ -102,6 +102,20 @@ services:
       - 7878:7878
     restart: unless-stopped
 
+  cleanuparr:
+    image: ghcr.io/cleanuparr/cleanuparr:latest
+    container_name: cleanuparr
+    restart: unless-stopped
+    ports:
+      - 11011:11011
+    environment:
+      - PORT=11011
+      - BASE_PATH=
+      - PUID=1000
+      - PGID=1000
+      - UMASK=022
+      - TZ=America/Edmonton
+
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
