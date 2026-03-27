@@ -5,3 +5,4 @@ include:
   - ./Ghostfolio/docker-compose.yaml
   - ./HomeAssistant/docker-compose.yaml
   - ./F1/docker-compose.yaml
+  - ./Letterboxd/docker-compose.yml

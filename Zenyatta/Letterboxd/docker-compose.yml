@@ -1,0 +1,12 @@
+services:
+  your-letterboxd:
+    container_name: letterboxd
+    image: yuyangchee98/your_letterboxd:main
+    ports:
+      - "60007:8000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - LETTERBOXD_USERNAME=${LETTERBOXD_USERNAME}
+      - TMDB_ACCESS_TOKEN=${TMDB_ACCESS_TOKEN}
+    restart: unless-stopped
