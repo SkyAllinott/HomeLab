@@ -41,6 +41,7 @@
           brightness_pct: 50
         target:
           entity_id: light.front_porch_light
+          device_id: 0cf30f7ffe16417283871ea4d5e09ea9
       - delay:
           hours: 0
           minutes: 5
@@ -51,6 +52,7 @@
         data: {}
         target:
           entity_id: light.front_porch_light
+          device_id: 0cf30f7ffe16417283871ea4d5e09ea9
       - action: notify.mobile_app_skysphone
         metadata: {}
         data:
@@ -74,4 +76,61 @@
     data: {}
     target:
       entity_id: light.desk_bedroom_lamp
+  mode: single
+- id: '1758506806072'
+  alias: Workday Morning
+  description: ''
+  triggers:
+  - trigger: time
+    at: 07:15:00
+    weekday:
+    - mon
+    - tue
+    - wed
+    - fri
+  conditions:
+  - condition: template
+    value_template: '{{ as_timestamp(state_attr(''sun.sun'', ''next_rising'')) > as_timestamp(now().replace(hour=7,
+      minute=20, second=0)) }}'
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    data:
+      color_temp_kelvin: 2000
+    target:
+      device_id:
+      - 0cf30f7ffe16417283871ea4d5e09ea9
+      - 05542fd2f06cccdec85ae65ba0df3b03
+  - delay:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      device_id:
+      - 0cf30f7ffe16417283871ea4d5e09ea9
+      - 05542fd2f06cccdec85ae65ba0df3b03
+  mode: single
+- id: '1758507114795'
+  alias: No Ones Home
+  description: ''
+  triggers:
+  - trigger: zone
+    entity_id: device_tracker.skysphone
+    zone: zone.home
+    event: leave
+  conditions: []
+  actions:
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      device_id:
+      - ffd0e4c8d553619da3ccc26d63f1be54
+      - 0cf30f7ffe16417283871ea4d5e09ea9
+      - 6ba068f9363213dae8f34ba0d2f248de
+      - 05542fd2f06cccdec85ae65ba0df3b03
   mode: single

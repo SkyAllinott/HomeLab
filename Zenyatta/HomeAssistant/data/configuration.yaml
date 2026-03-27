@@ -45,7 +45,7 @@ homeassistant:
 onboarding: false
 devices:
   '0xb4e842864e4c0000':
-    friendly_name: desk bedroom lamp
+    friendly_name: Purifier Lamp
   '0xb4e842867dab0000':
     friendly_name: front porch light
   '0x282c02bfffeec061':
@@ -55,4 +55,6 @@ devices:
   '0xb4e842865f870000':
     friendly_name: Bedside Lamp
   '0x7cb94c6b8cc80000':
-    friendly_name: Office Light
+    friendly_name: Living Room Lamp
+  '0x282c02bfffeea802':
+    friendly_name: AC
